@@ -1,0 +1,49 @@
+<div class="page-header">
+    <h1>Detalii Pacient</h1>
+</div>
+
+
+<form name="editPacient.nameForm" ng-submit="editPacient.updateName(newName, editPacient.nameForm.name.$valid)" novalidate>
+    <!-- Name -->
+    <label>Name:</label>
+    <input class="form-control" type="text" name="name" placeholder="please enter name" ng-model="newName" required>
+
+    <br>
+
+    <button ng-disabled="editPacient.disabled" class="btn btn-primary" type="submit">Modifica</button>
+</form>
+<br>
+
+<form name="editPacient.cabinetForm" ng-submit="editPacient.updateCabinet(newCabinet, editPacient.cabinetForm.cabinet.$valid)"
+    novalidate>
+    <!-- Name -->
+    <label>Cabinet:</label>
+    <input class="form-control" type="text" name="cabinet" placeholder="please enter cabinet" ng-model="newCabinet" required>
+
+    <br>
+
+    <button ng-disabled="editPacient.disabled" class="btn btn-primary" type="submit">Modifica</button>
+</form>
+<br>
+
+<!-- Phase three : Email-->
+<form name="editPacient.emailForm" ng-submit="editPacient.updateEmail(newEmail, editPacient.emailForm.email.$valid)" novalidate>
+    <!-- Email -->
+    <label>Email:</label>
+    <input class="form-control" type="text" name="email" placeholder="please enter email" ng-model="newEmail" ng-minlength="3"
+        ng-maxlength="25" required>
+    <br>
+
+    <button ng-disabled="editPacient.disabled" class="btn btn-primary" type="submit">Modifica</button>
+</form>
+<br>
+
+<div class="row show-hide-message" ng-show="editPacient.successMsg">
+    <div class="alert alert-success">{{ editPacient.successMsg }}</div>
+</div>
+
+<br>
+
+<div class="row show-hide-message" ng-show="editPacient.errorMsg">
+    <div class="alert alert-danger">{{ editPacient.errorMsg }}</div>
+</div>

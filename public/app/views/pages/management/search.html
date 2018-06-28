@@ -1,0 +1,106 @@
+<div class="row text-center">
+    <div class="container">
+        <h2 class="section-heading">Motor Cautare</h2>
+    </div>
+</div>
+
+<br>
+
+<div class="jumbotron text-center" ng-show="registru.loading">
+    <span class="glyphicon glyphicon-repeat spinner"></span>
+    <p>Loading....</p>
+</div>
+
+<br>
+
+<div class="navbar-form">
+    <div class="form-group">
+        <input type="text" class="form-control" name="searchByName" placeholder="cauta dupa..." ng-model="searchByName">
+    </div>
+    <button type="button" class="btn btn-default">Nume</button>
+</div>
+
+<div class="navbar-form">
+    <div class="form-group">
+        <input type="text" class="form-control" name="searchByEmail" placeholder="cauta dupa..." ng-model="searchByEmail">
+    </div>
+    <button type="button" class="btn btn-default">E-mail</button>
+</div>
+
+<div class="navbar-form">
+    <div class="form-group">
+        <input type="text" class="form-control" name="searchByName" placeholder="cauta dupa..." ng-model="searchByName">
+    </div>
+    <button type="button" class="btn btn-default">Nume</button>
+</div>
+
+<div class="navbar-form">
+    <button type="button" ng-click="registru.advancedSearch(searchByUsername, searchByEmail, searchByName);" class="btn btn-default">Search</button>
+    <br>
+    <br>
+    <div class="btn-group">
+        <button type="button" class="btn btn-danger">Sort by</button>
+        <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="caret"></span>
+            <span class="sr-only">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu">
+            <li>
+                <a ng-click="registru.sortOrder('username');" href="#">Username</a>
+            </li>
+            <li>
+                <a ng-click="registru.sortOrder('email');" href="#">E-mail</a>
+            </li>
+            <li>
+                <a ng-click="registru.sortOrder('name');" href="#">Name</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<br>
+
+<div ng-show="registru.searchLimit === undefined">
+    <p>
+        <strong>Results: </strong>{{ (registru.pacienti | filter: advancedSearchFilter | limitTo: registru.searchLimit).length }}</p>
+</div>
+
+<div ng-show="registru.sort">
+    <p>
+        <strong>Sort by: </strong>{{ registru.sort }}</p>
+</div>
+
+<br>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <strong>Pacient Management</strong>
+    </div>
+    <table class="table">
+        <tr>
+            <th>Cabinet</th>
+            <th>Data</th>
+            <th>Nume</th>
+            <th>Prenume</th>
+            <th>Email</th>
+            <th>Ultima modificare</th>
+        </tr>
+        <tr ng-repeat="pacient in registru.pacienti | filter: advancedSearchFilter | limitTo: registru.searchLimit | orderBy: registru.sort">
+            <td>{{ pacient.postedBy }}</td>
+            <td>{{ pacient.created }}</td>
+            <td>{{ pacient.name }}</td>
+            <td>{{ pacient.cabinet }}</td>
+            <td>{{ pacient.email }}</td>
+            <td>{{ pacient.updated_at }}</td>
+            <td>
+                <a href="/editPacient/{{ pacient._id }}">
+                    <button type="button" ng-show="registru.editPacientAccess" class="btn btn-primary">Edit</button>
+                </a>
+                <button type="button" ng-click="registru.deletePacient(pacient.name);" ng-show="registru.deletePacientAccess" class="btn btn-danger">Delete</button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<br>
+<br>
