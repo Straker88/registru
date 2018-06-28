@@ -290,16 +290,6 @@ angular.module('managementController', [])
         app.limit = 20;
         app.searchLimit = 0;
 
-        // function getUsers() {
-        //     User.getUsers().then(function (data) {
-        //         app.loading = false;
-        //         currentUser = data.data.currentUser.username;
-        //         currentUserPermission = data.data.permission;
-        //         return currentUser, currentUserPermission;
-        //     });
-        // }
-        // getUsers();
-
         (() => {
             User.getUsers().then(function (data) {
                 app.loading = false;
