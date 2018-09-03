@@ -287,8 +287,6 @@ angular.module('managementController', [])
         app.errorMsg = false;
         app.editPacientAccess = false;
         app.deletePacientAccess = false;
-        app.limit = 20;
-        app.searchLimit = 0;
 
         (() => {
             User.getUsers().then(function (data) {
@@ -315,8 +313,8 @@ angular.module('managementController', [])
                     app.errorMsg = data.data.message;
                     app.loading = false;
                 }
-            });
 
+            });
         }
 
         getPacienti();
@@ -348,6 +346,7 @@ angular.module('managementController', [])
                 }
             });
         };
+
 
         app.search = function (searchKeyword, number) {
             app.showMoreError = false;
@@ -394,14 +393,11 @@ angular.module('managementController', [])
             }
         };
 
-        // function MyController($scope) {
-        //     $scope.created = new Date();
-        // };
-        // console.log(MyController());
     })
 
     .controller('editPacientCtrl', function ($scope, $routeParams, Pacient, User, $timeout) {
         var app = this;
+        var eroare = 'Nu esti utilizatorul care a inregistrat acest service, modificarile nu sunt salvate';
 
 
         function getUsers() {
@@ -413,58 +409,366 @@ angular.module('managementController', [])
         }
 
         getUsers();
-
         Pacient.getPacient($routeParams.id).then(function (data) {
             if (data.data.success) {
+                $scope.newData_Inregistrare = data.data.pacient.data_inregistrare;
+                $scope.newNume = data.data.pacient.nume;
+                $scope.newDenumire_Aparat = data.data.pacient.denumire_aparat;
+                $scope.newSerie_Aparat = data.data.pacient.serie_aparat;
+                $scope.newDefectiune_Reclamata = data.data.pacient.defectiune_reclamata;
+                $scope.newGarantie = data.data.pacient.garantie;
+                $scope.newCutie = data.data.pacient.cutie;
+                $scope.newBaterie = data.data.pacient.baterie;
+                $scope.newMulaj = data.data.pacient.mulaj;
+                $scope.newOliva = data.data.pacient.oliva;
+                $scope.newObservatii_Cabinet = data.data.pacient.observatii_cabinet;
+                $scope.newObservatii_Pacient = data.data.pacient.observatii_pacient;
+                $scope.newPredat_Pacient = data.data.pacient.predat_pacient;
+                $scope.newIesit_Cabinet = data.data.pacient.iesit_cabinet;
+
+
                 $scope.newCabinet = data.data.pacient.cabinet;
-                $scope.newName = data.data.pacient.name;
                 $scope.newEmail = data.data.pacient.email;
-                currentPostedBy = data.data.pacient.postedBy;
+                $scope.newPostedBy = data.data.pacient.postedBy;
+                currentCabinet = data.data.pacient.cabinet;
                 app.currentPacient = data.data.pacient._id;
             } else {
                 app.errorMsg = data.data.message;
             }
         });
 
-        app.updateName = function (newName, valid) {
-            app.errorMsg = false;
-            app.disabled = true;
+        app.updateNume = function (newNume, valid) {
+            app.errorMsgNume = false;
+            app.disabled = false;
 
             if (valid) {
                 var pacientObject = {};
                 pacientObject._id = app.currentPacient;
-                pacientObject.name = $scope.newName;
+                pacientObject.name = $scope.newNume;
 
-                if (currentPostedBy === currentUser) {
+                if (currentCabinet === currentUser) {
                     Pacient.editPacient(pacientObject).then(function (data) {
 
                         if (data.data.success) {
-                            app.successMsg = data.data.message;
+                            app.successMsgNume = data.data.message;
                             $timeout(function () {
-                                app.nameForm.name.$setPristine();
-                                app.nameForm.name.$setUntouched();
-                                app.successMsg = false;
+                                app.numeForm.nume.$setPristine();
+                                app.numeForm.nume.$setUntouched();
+                                app.successMsgNume = false;
                                 app.disabled = false;
-                            }, 1000);
+                            }, 700);
 
                         } else {
-                            app.errorMsg = data.data.message;
+                            app.errorMsgNume = data.data.message;
                             app.disabled = false;
                         }
                     });
                 } else {
-                    app.errorMsg = 'Nu esti utilizatorul care a inregistrat acest service, nu poti face modificari';
-                    app.disabled = false;
+                    app.errorMsgNume = eroare;
+                    app.disabled = true;
+                    $timeout(function () {
+                        app.errorMsgNume = false;
+                        app.disabled = false;
+                    }, 3000);
                 }
             } else {
-                app.errorMsg = 'Please ensure form is filled out properly';
+                app.errorMsgNume = 'Please ensure form is filled out properly';
                 app.disabled = false;
             }
         };
 
+
+        app.updateDenumire_Aparat = function (newDenumire_Aparat, valid) {
+            app.errorMsgDenumire_Aparat = false;
+            app.disabled = false;
+
+            if (valid) {
+                var pacientObject = {};
+                pacientObject._id = app.currentPacient;
+                pacientObject.denumire_aparat = $scope.newDenumire_Aparat;
+
+                if (currentCabinet === currentUser) {
+                    Pacient.editPacient(pacientObject).then(function (data) {
+
+                        if (data.data.success) {
+                            app.successMsgDenumire_Aparat = data.data.message;
+                            $timeout(function () {
+                                app.denumire_aparatForm.denumire_aparat.$setPristine();
+                                app.denumire_aparatForm.denumire_aparat.$setUntouched();
+                                app.successMsgDenumire_Aparat = false;
+                                app.disabled = false;
+                            }, 700);
+
+                        } else {
+                            app.errorMsgDenumire_Aparat = data.data.message;
+                            app.disabled = false;
+                        }
+                    });
+                } else {
+                    app.errorMsgDenumire_Aparat = eroare;
+                    app.disabled = true;
+                    $timeout(function () {
+                        app.errorMsgDenumire_Aparat = false;
+                        app.disabled = false;
+                    }, 3000);
+                }
+            } else {
+                app.errorMsgDenumire_Aparat = 'Please ensure form is filled out properly';
+                app.disabled = false;
+            }
+        };
+
+        app.updateSerie_Aparat = function (newSerie_Aparat, valid) {
+            app.errorMsgSerie_Aparat = false;
+            app.disabled = false;
+
+            if (valid) {
+                var pacientObject = {};
+                pacientObject._id = app.currentPacient;
+                pacientObject.serie_aparat = $scope.newSerie_Aparat;
+
+                if (currentCabinet === currentUser) {
+                    Pacient.editPacient(pacientObject).then(function (data) {
+
+                        if (data.data.success) {
+                            app.successMsgSerie_Aparat = data.data.message;
+                            $timeout(function () {
+                                app.serie_aparatForm.serie_aparat.$setPristine();
+                                app.serie_aparatForm.serie_aparat.$setUntouched();
+                                app.successMsgSerie_Aparat = false;
+                                app.disabled = false;
+                            }, 700);
+
+                        } else {
+                            app.errorMsgSerie_Aparat = data.data.message;
+                            app.disabled = false;
+                        }
+                    });
+                } else {
+                    app.errorMsgSerie_Aparat = eroare;
+                    app.disabled = true;
+                    $timeout(function () {
+                        app.errorMsgSerie_Aparat = false;
+                        app.disabled = false;
+                    }, 3000);
+                }
+            } else {
+                app.errorMsgSerie_Aparat = 'Acest camp trebuie completat';
+                app.disabled = false;
+            }
+        };
+
+        app.updateDefectiune_Reclamata = function (newDefectiune_Reclamata, valid) {
+            app.errorMsgDefectiune_Reclamata = false;
+            app.disabled = false;
+
+            if (valid) {
+                var pacientObject = {};
+                pacientObject._id = app.currentPacient;
+                pacientObject.defectiune_reclamata = $scope.newDefectiune_Reclamata;
+
+                if (currentCabinet === currentUser) {
+                    Pacient.editPacient(pacientObject).then(function (data) {
+
+                        if (data.data.success) {
+                            app.successMsgDefectiune_Reclamata = data.data.message;
+                            $timeout(function () {
+                                app.defectiune_reclamataForm.defectiune_reclamata.$setPristine();
+                                app.defectiune_reclamataForm.defectiune_reclamata.$setUntouched();
+                                app.successMsgDefectiune_Reclamata = false;
+                                app.disabled = false;
+                            }, 700);
+
+                        } else {
+                            app.errorMsgDefectiune_Reclamata = data.data.message;
+                            app.disabled = false;
+                        }
+                    });
+                } else {
+                    app.errorMsgDefectiune_Reclamata = eroare;
+                    app.disabled = true;
+                    $timeout(function () {
+                        app.errorMsgDefectiune_Reclamata = false;
+                        app.disabled = false;
+                    }, 3000);
+                }
+            } else {
+                app.errorMsgDefectiune_Reclamata = 'Acest camp trebuie completat';
+                app.disabled = false;
+            }
+        };
+
+        app.updateObservatii_Cabinet = function (newObservatii_Cabinet, valid) {
+            app.errorMsgObservatii_Cabinet = false;
+            app.disabled = false;
+
+
+            var pacientObject = {};
+            pacientObject._id = app.currentPacient;
+            pacientObject.observatii_cabinet = $scope.newObservatii_Cabinet;
+
+            if (currentCabinet === currentUser) {
+                Pacient.editPacient(pacientObject).then(function (data) {
+
+                    if (data.data.success) {
+                        app.successMsgObservatii_Cabinet = data.data.message;
+                        $timeout(function () {
+                            app.observatii_cabinetForm.observatii_cabinet.$setPristine();
+                            app.observatii_cabinetForm.observatii_cabinet.$setUntouched();
+                            app.successMsgObservatii_Cabinet = false;
+                            app.disabled = false;
+                        }, 700);
+
+                    } else {
+                        app.errorMsgObservatii_Cabinet = data.data.message;
+                        app.disabled = false;
+                    }
+                });
+            } else {
+                app.errorMsgObservatii_Cabinet = eroare;
+                app.disabled = true;
+                $timeout(function () {
+                    app.errorMsgObservatii_Cabinet = false;
+                    app.disabled = false;
+                }, 3000);
+            }
+
+        };
+
+        app.updateObservatii_Pacient = function (newObservatii_Pacient, valid) {
+            app.errorMsgObservatii_Pacient = false;
+            app.disabled = false;
+
+
+            var pacientObject = {};
+            pacientObject._id = app.currentPacient;
+            pacientObject.observatii_pacient = $scope.newObservatii_Pacient;
+
+            if (currentCabinet === currentUser) {
+                Pacient.editPacient(pacientObject).then(function (data) {
+
+                    if (data.data.success) {
+                        app.successMsgObservatii_Pacient = data.data.message;
+                        $timeout(function () {
+                            app.observatii_pacientForm.observatii_pacient.$setPristine();
+                            app.observatii_pacientForm.observatii_pacient.$setUntouched();
+                            app.successMsgObservatii_Pacient = false;
+                            app.disabled = false;
+                        }, 700);
+
+                    } else {
+                        app.errorMsgObservatii_Pacient = data.data.message;
+                        app.disabled = false;
+                    }
+                });
+            } else {
+                app.errorMsgObservatii_Pacient = eroare;
+                app.disabled = true;
+                $timeout(function () {
+                    app.errorMsgObservatii_Pacient = false;
+                    app.disabled = false;
+                }, 3000);
+
+            }
+        };
+
+
+
+        app.updateIesit_Cabinet = function (newIesit_Cabinet, valid) {
+            app.errorMsgIesit_Cabinet = false;
+            app.disabled = false;
+
+            if (valid) {
+                var pacientObject = {};
+                pacientObject._id = app.currentPacient;
+                pacientObject.iesit_cabinet = $scope.newIesit_Cabinet;
+
+                if (currentCabinet === currentUser) {
+                    Pacient.editPacient(pacientObject).then(function (data) {
+
+                        if (data.data.success) {
+                            app.successMsgIesit_Cabinet = data.data.message;
+                            $timeout(function () {
+                                app.iesit_cabinetForm.iesit_cabinet.$setPristine();
+                                app.iesit_cabinetForm.iesit_cabinet.$setUntouched();
+                                app.successMsgIesit_Cabinet = false;
+                                app.disabled = false;
+                            }, 2000);
+
+                        } else {
+                            app.errorMsgIesit_Cabinet = data.data.message;
+                            app.disabled = true;
+                            $timeout(function () {
+                                app.errorMsgIesit_Cabinet = false;
+                                app.disabled = false;
+                            }, 3000);
+
+                        }
+                    });
+                } else {
+                    app.errorMsgIesit_Cabinet = eroare;
+                    app.disabled = true;
+                    $timeout(function () {
+                        app.errorMsgIesit_Cabinet = false;
+                        app.disabled = false;
+                    }, 3000);
+                }
+            } else {
+                app.errorMsgIesit_Cabinet = 'Please ensure form is filled out properly';
+                app.disabled = false;
+            }
+        };
+
+        app.updatePredat_Pacient = function (newPredat_Pacient, valid) {
+            app.errorMsgPredat_Pacient = false;
+            app.disabled = false;
+
+            if (valid) {
+                var pacientObject = {};
+                pacientObject._id = app.currentPacient;
+                pacientObject.predat_pacient = $scope.newPredat_Pacient;
+
+                if (currentCabinet === currentUser) {
+                    Pacient.editPacient(pacientObject).then(function (data) {
+
+                        if (data.data.success) {
+                            app.successMsgPredat_Pacient = data.data.message;
+                            $timeout(function () {
+                                app.predat_pacientForm.predat_pacient.$setPristine();
+                                app.predat_pacientForm.predat_pacient.$setUntouched();
+                                app.successMsgPredat_Pacient = false;
+                                app.disabled = false;
+                            }, 2000);
+
+                        } else {
+                            app.errorMsgPredat_Pacient = data.data.message;
+                            app.disabled = true;
+                            $timeout(function () {
+                                app.errorMsgPredat_Pacient = false;
+                                app.disabled = false;
+                            }, 3000);
+
+                        }
+                    });
+                } else {
+                    app.errorMsgPredat_Pacient = eroare;
+                    app.disabled = true;
+                    $timeout(function () {
+                        app.errorMsgPredat_Pacient = false;
+                        app.disabled = false;
+                    }, 3000);
+                }
+            } else {
+                app.errorMsgPredat_Pacient = 'Please ensure form is filled out properly';
+                app.disabled = false;
+            }
+        };
+
+
+
         app.updateCabinet = function (newCabinet, valid) {
             app.errorMsg = false;
-            app.disabled = true;
+            app.disabled = false;
 
             if (valid) {
                 var pacientObject = {};
@@ -472,13 +776,13 @@ angular.module('managementController', [])
                 pacientObject.cabinet = $scope.newCabinet;
                 Pacient.editPacient(pacientObject).then(function (data) {
                     if (data.data.success) {
-                        app.successMsg = data.data.message;
+                        app.successMsg2 = data.data.message;
                         $timeout(function () {
                             app.cabinetForm.cabinet.$setPristine();
                             app.cabinetForm.cabinet.$setUntouched();
                             app.successMsg = false;
                             app.disabled = false;
-                        }, 1000);
+                        }, 700);
                     } else {
                         app.errorMsg = data.data.message;
                         app.disabled = false;
@@ -493,7 +797,7 @@ angular.module('managementController', [])
 
         app.updateEmail = function (newEmail, valid) {
             app.errorMsg = false;
-            app.disabled = true;
+            app.disabled = false;
 
             if (valid) {
                 var pacientObject = {};
@@ -501,13 +805,13 @@ angular.module('managementController', [])
                 pacientObject.email = $scope.newEmail;
                 Pacient.editPacient(pacientObject).then(function (data) {
                     if (data.data.success) {
-                        app.successMsg = data.data.message;
+                        app.successMsg3 = data.data.message;
                         $timeout(function () {
                             app.emailForm.email.$setPristine();
                             app.emailForm.email.$setUntouched();
                             app.successMsg = false;
                             app.disabled = false;
-                        }, 1000);
+                        }, 700);
                     } else {
                         app.errorMsg = data.data.message;
                         app.disabled = false;

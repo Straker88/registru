@@ -93,6 +93,8 @@ var app = angular.module('appRoutes', ['ngRoute'])
         });
     });
 
+
+
 app.run(['$rootScope', 'Auth', '$location', 'User', function ($rootScope, Auth, $location, User) {
 
     $rootScope.$on('$routeChangeStart', function (event, next, current) {
@@ -108,7 +110,7 @@ app.run(['$rootScope', 'Auth', '$location', 'User', function ($rootScope, Auth, 
                         if (next.$$route.permission[0] !== data.data.permission) {
                             if (next.$$route.permission[1] !== data.data.permission) {
                                 event.preventDefault();
-                                $location.path('/');
+                                $location.path('/registru');
                             }
                         }
                     });

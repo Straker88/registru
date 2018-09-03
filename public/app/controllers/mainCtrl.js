@@ -1,6 +1,6 @@
 angular.module('mainController', ['authServices', 'userServices'])
 
-    .controller('mainCtrl', function (Auth, $timeout, $location, $rootScope, $interval, $window, $route, User, AuthToken) {
+    .controller('mainCtrl', function (Auth, $timeout, $location, $rootScope, $interval, $window, $route, User, AuthToken, $scope) {
         var app = this;
 
         app.loadme = false;
@@ -13,7 +13,7 @@ angular.module('mainController', ['authServices', 'userServices'])
                     if (token == null) {
                         $interval.cancel(interval);
                     } else {
-                        self.parseJWT = function (token) {  //function parseJWT web
+                        self.parseJWT = function (token) {
                             var base64Url = token.split('.')[1];
                             var base64 = base64Url.replace('.', '+').replace('_', '/');
                             return JSON.parse($window.atob(base64));
@@ -22,45 +22,29 @@ angular.module('mainController', ['authServices', 'userServices'])
                         var timeStamp = Math.floor(Date.now() / 1000);
                         var timeCheck = expireTime.exp - timeStamp;
                         if (timeCheck <= 25) {
-                            console.log('token has expired');
-                            showModal(1);
+                            console.log('token-ul a expirat');
                             $interval.cancel(interval);
                         }
                     }
-                }, 2000);
+                }, 86400);
             }
         };
 
         app.checkSession();
 
-        var showModal = function (option) {
+        var exit = function (option) {
             app.choiceMade = false;
-            app.modalHeader = undefined;
-            app.modalBody = undefined;
             app.hideButton = false;
 
 
-            if (option === 1) {
-                app.modalHeader = 'Timeout Warning';
-                app.modalBody = 'Your session will expire in 5 minutes. Would you like to renew your session?';
-                $("#myModal").modal({ backdrop: "static" });
-            } else if (option === 2) {
-                app.hideButton = true;
-                app.modalHeader = 'Logging Out';
-                $("#myModal").modal({ backdrop: "static" });
-                $timeout(function () {
-                    Auth.logout();
-                    $location.path('/login');
-                    hideModal();
-                    $route.reload();
-                }, 2000);
-            }
-            $timeout(function () {
-                if (!app.choiceMade) {
-                    hideModal();
-                }
-            }, 4000);
+            ($timeout(function () {
+                Auth.logout();
+                $location.path('/login');
+                $route.reload();
+            }, 1000)
+            )
         };
+
 
         app.renewSession = function () {
             app.choiceMade = true;
@@ -72,26 +56,25 @@ angular.module('mainController', ['authServices', 'userServices'])
                     app.modalBody = data.data.message;
                 }
             });
-            hideModal();
         };
 
-        app.endSession = function () {
-            app.choiceMade = true;
-            hideModal();
-            $timeout(function () {
-                showModal(2);
-            }, 1000);
-        };
+        // app.endSession = function () {
+        //     app.choiceMade = true;
+        //     hideModal();
+        //     $timeout(function () {
+        //         showModal(2);
+        //     }, 1000);
+        // };
 
-        var hideModal = function () {
-            $("#myModal").modal('hide');
-        }
+        // var hideModal = function () {
+        //     $("#myModal").modal('hide');
+        // }
 
         $rootScope.$on('$routeChangeStart', function () {
 
             if (!app.checkSession) app.checkSession();
 
-            // Check if user is logged in
+
             if (Auth.isLoggedIn()) {
                 app.isLoggedIn = true;
                 Auth.getUser().then(function (data) {
@@ -123,9 +106,9 @@ angular.module('mainController', ['authServices', 'userServices'])
             Auth.login(app.loginData).then(function (data) {
                 if (data.data.success) {
                     app.loading = false;
-                    // Create Success Message
-                    app.successMsg = data.data.message + '...Redirecting';
-                    // Redirect to Home Page
+
+                    app.successMsg = data.data.message + '...Se incarca';
+
                     $timeout(function () {
                         $location.path('/registru');
                         app.loginData = '';
@@ -133,7 +116,6 @@ angular.module('mainController', ['authServices', 'userServices'])
                         app.checkSession();
                     }, 2000);
                 } else {
-                    // Create Error Message
                     app.loading = false;
                     app.errorMsg = data.data.message;
                 }
@@ -141,8 +123,9 @@ angular.module('mainController', ['authServices', 'userServices'])
         };
 
         app.logout = function () {
-            showModal(2);
+            exit();
         };
+
 
     });
 

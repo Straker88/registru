@@ -1,0 +1,281 @@
+<script type="text/javascript" src="assets/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="assets/js/daterangepicker.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+<script type="text/javascript" src="assets/js/jquery.dataTables.min.js"></script>
+
+<div class="page-header">
+    <h1>Registru Service Clarfon</h1>
+</div>
+
+<div class="jumbotron text-center" ng-show="registru.loading">
+    <p>Se incarca...</p>
+
+</div>
+
+<div>
+
+    <table id="example" cellpadding="0" cellspacing="0" border="0">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Confirmation #</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr></tr>
+        </tbody>
+    </table>
+
+</div>
+
+<script>
+
+    // setTimeout(function () {
+    //     var oTable = $('#tabel').dataTable();
+
+    // }, 4000);
+    // function createCORSRequest(method, url) {
+
+    //     var xhr = new XMLHttpRequest();
+    //     if ("withCredentials" in xhr) {
+    //         // XHR for Chrome/Firefox/Opera/Safari.
+    //         xhr.open(method, url, true);
+    //     } else if (typeof XDomainRequest != "undefined") {
+    //         // XDomainRequest for IE.
+    //         xhr = new XDomainRequest();
+    //         xhr.open(method, url);
+    //     } else {
+    //         // CORS not supported.
+    //         xhr = null;
+    //     }
+    //     return xhr;
+    // }
+
+    // // Helper method to parse the title tag from the response.
+    // function getTitle(text) {
+    //     return text.match('<title>(.*)?</title>')[1];
+    // }
+
+    // // Make the actual CORS request.
+    // function makeCorsRequest() {
+    //     // This is a sample server that supports CORS.
+    //     var url = 'https://api.mlab.com/api/1/databases/pacienti/collections/intrari?apiKey=PONwf1O0LyDTTpYJLKmI0f6mzUyzyHAX';
+
+    //     var xhr = createCORSRequest('GET', url);
+    //     if (!xhr) {
+    //         alert('CORS not supported');
+    //         return;
+    //     }
+
+    //     // Response handlers.
+    //     xhr.onload = function () {
+    //         var text = xhr.responseText;
+    //         var title = getTitle(text);
+    //         alert('Response from CORS request to ' + url + ': ' + title);
+    //     };
+
+    //     xhr.onerror = function () {
+    //         alert('Woops, there was an error making the request.');
+    //     };
+
+    //     xhr.send();
+    // }
+    // $(document).ready(function () {
+    //     var oTable = $('#tabel').dataTable({
+    //         "ordering": true,
+    //         "ajax": 'api/registru',
+    //         "searching": true,
+    //         "pageLength": 25,
+    //         "pagination": true,
+    //         columnDefs: [
+    //             {
+    //                 "targets": 0,
+    //                 "orderable": false,
+    //                 type: 'date-eu', targets: ([1])
+    //             }
+    //         ],
+
+    //         "order": [[0, 'asc']],
+    //         "oLanguage": {
+    //             "sSearch": "Cautare",
+    //             "sLengthMenu": "Arata _MENU_ inregistrari",
+    //         }
+    //     });
+
+    //     var startdate;
+    //     var enddate;
+
+    //     $('#reportrange').daterangepicker({
+    //         ranges: {
+    //             'Toate': [moment().subtract(10, 'year'), moment().add(10, 'year')],
+    //             "Astazi": [moment(), moment()],
+    //             'Ieri': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+    //             'Ultimele 7 zile': [moment().subtract(6, 'days'), moment()],
+    //             'Luna curenta': [moment().startOf('month'), moment().endOf('month')],
+    //             'Luna trecuta': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+    //         }
+    //         ,
+    //         "opens": "right",
+    //         format: 'YYYY/MM/DD',
+    //         dateLimit: { days: 60 },
+    //         locale: {
+    //             "format": "DD/MM/YYYY",
+    //             "separator": " - ",
+    //             "applyLabel": "Aplica",
+    //             "cancelLabel": "Anuleaza",
+    //             "fromLabel": "De la",
+    //             "toLabel": "Pana la",
+    //             "customRangeLabel": "Alege interval",
+    //             "daysOfWeek": [
+    //                 "Dum",
+    //                 "Luni",
+    //                 "Mar",
+    //                 "Mie",
+    //                 "Joi",
+    //                 "Vin",
+    //                 "Sam"
+    //             ],
+    //             "monthNames": [
+    //                 "Ianuarie",
+    //                 "Februarie",
+    //                 "Martie",
+    //                 "Aprilie",
+    //                 "Mai",
+    //                 "Iunie",
+    //                 "Iulie",
+    //                 "August",
+    //                 "Septembrie",
+    //                 "Octombrie",
+    //                 "Noiembrie",
+    //                 "Decembrie"
+    //             ],
+    //             "firstDay": 1
+    //         },
+
+    //     },
+    //         function (start, end, label) {
+    //             var s = moment(start.toISOString());
+    //             var e = moment(end.toISOString());
+    //             startdate = s.format("YYYY-MM-DD");
+    //             enddate = e.format("YYYY-MM-DD");
+    //         });
+
+    //     $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
+    //         startdate = picker.startDate.format('YYYY-MM-DD');
+    //         enddate = picker.endDate.format('YYYY-MM-DD');
+    //         $.fn.dataTableExt.afnFiltering.push(
+    //             function (oSettings, aData, iDataIndex) {
+    //                 if (startdate != undefined) {
+    //                     var coldate = aData[1].split("/");
+    //                     var d = new Date(coldate[2], coldate[1] - 1, coldate[0]);
+    //                     var date = moment(d.toISOString());
+    //                     date = date.format("YYYY-MM-DD");
+
+    //                     dateMin = startdate.replace(/-/g, "");
+    //                     dateMax = enddate.replace(/-/g, "");
+    //                     date = date.replace(/-/g, "");
+
+
+    //                     if (dateMin == "" && date <= dateMax) {
+    //                         return true;
+    //                     }
+    //                     else if (dateMin == "" && date <= dateMax) {
+    //                         return true;
+    //                     }
+    //                     else if (dateMin <= date && "" == dateMax) {
+    //                         return true;
+    //                     }
+    //                     else if (dateMin <= date && date <= dateMax) {
+    //                         return true;
+    //                     }
+
+    //                     return false;
+    //                 }
+    //             }
+    //         );
+
+    //         oTable.fnDraw();
+
+    //     });
+    // });
+
+    $(document).ready(function () {
+        $('#tabel').DataTable({
+            "ajax": "/api/registru/",
+            "bServerSide": false,
+            "sAjaxDataProp": "",
+            dataType: 'jsonp',
+            type: "GET",
+            headers: {
+                'X-Auth-Token': token,
+            },
+            columns: [
+                { "data": "postedBy" },
+                { "data": "cabinet" },
+                { "data": "name" },
+                { "data": "email" },
+                { "data": "permission" },
+                { "data": "created" },
+                { "data": "updated_at" }
+            ]
+        });
+    });
+
+</script>
+
+
+<div>
+    <table id="tabel" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>postedBy</th>
+                <th>cabinet </th>
+                <th>name</th>
+                <th>email</th>
+                <th>permission</th>
+                <th>created</th>
+                <th>updated_at</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--
+            <tr ng-repeat="pacient in registru.pacienti track by pacient._id">
+                <td>{{ pacient.postedBy }}</td>
+                <td style="text-align: center;">{{ pacient.created }}</td>
+                <td>{{ pacient.created }}</td>
+                <td>{{ pacient.name }}</td>
+                <td>{{ pacient.created }}</td>
+                <td>{{ pacient.cabinet }}</td>
+                <td>{{ pacient.name }}</td>
+                <td>{{ pacient.email }}</td>
+                <td>{{ pacient.name }}</td>
+                <td>{{ pacient.name }}</td>
+
+                <td>{{ pacient.updated_at }}</td>
+                <td>
+                    <a href="/editPacient/{{ pacient._id }}">
+                        <button type="button" ng-show="registru.editPacientAccess" style="width: 100%;" class="btn btn-primary">Detalii</button>
+                    </a>
+                </td>
+            </tr> -->
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>postedBy</th>
+                <th>cabinet </th>
+                <th>name</th>
+                <th>email</th>
+                <th>permission</th>
+                <th>created</th>
+                <th>updated_at</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<br>
+<br>
+<!-- <div class="row show-hide-message" ng-show="registru.showMoreError">
+    <div class="alert alert-danger">{{ registru.showMoreError }}</div>
+</div> -->

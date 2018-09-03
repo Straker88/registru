@@ -1,0 +1,301 @@
+<script type="text/javascript" src="assets/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="assets/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-date-range-picker/0.18.0/jquery.daterangepicker.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.3/daterangepicker.js"></script>
+<div class="page-header">
+    <h1>Registru Service Clarfon</h1>
+</div>
+
+<div class="jumbotron text-center" ng-show="registru.loading">
+    <p>Se incarca...</p>
+
+</div>
+<script>
+    // $(document).ready(function () {
+    //     function cbDropdown(column) {
+    //         return $('<ul>', {
+    //             'class': 'cb-dropdown'
+    //         }).appendTo($('<div>', {
+    //             'class': 'cb-dropdown-wrap'
+    //         }).appendTo(column));
+    //     }
+
+    //     $('#tabel').DataTable({
+
+    //         initComplete: function () {
+    //             this.api().columns().every(function () {
+    //                 var column = this;
+    //                 var ddmenu = cbDropdown($(column.header()))
+    //                     .on('change', ':checkbox', function () {
+    //                         var active;
+    //                         var vals = $(':checked', ddmenu).map(function (index, element) {
+    //                             active = true;
+    //                             return $.fn.dataTable.util.escapeRegex($(element).val());
+    //                         }).toArray().join('|');
+
+
+
+    //                         column
+    //                             .search(vals.length > 0 ? '^(' + vals + ')$' : '', true, false)
+    //                             .draw();
+
+    //                         if (this.checked) {
+    //                             $(this).closest('li').addClass('active', );
+    //                         } else {
+    //                             $(this).closest('li').removeClass('active', );
+    //                         }
+
+    //                         var active2 = ddmenu.parent().is('.active', );
+    //                         if (active && !active2) {
+    //                             ddmenu.parent().addClass('active', );
+    //                         } else if (!active && active2) {
+    //                             ddmenu.parent().removeClass('active', );
+    //                         }
+    //                     });
+    //                 $('#tabel tfoot th').each(function () {
+    //                     var title = $(this).text();
+    //                     $(this).html('<input type="text" placeholder="Cauta ' + title + '" /> ');
+    //                 });
+
+    //                 var table = $('#tabel').DataTable();
+
+    //                 table.columns().every(function () {
+    //                     var that = this;
+
+    //                     $('input', this.footer()).on('keyup change', function () {
+    //                         if (that.search() !== this.value) {
+    //                             that
+    //                                 .search(this.value)
+    //                                 .draw();
+    //                         }
+    //                     });
+    //                 });
+
+
+    //                 column.data().unique().sort().each(function (d, j) {
+
+    //                     $label = $('<label>', ),
+    //                         $text = $('<span>', {
+    //                             text: d
+    //                         }),
+    //                         $cb = $('<input>', {
+    //                             type: 'checkbox',
+    //                             value: d
+    //                         });
+
+    //                     $text.appendTo($label);
+    //                     $cb.appendTo($label);
+
+    //                     ddmenu.append($('<li>').append($label));
+    //                 });
+    //             });
+    //         }
+    //     });
+    // });
+
+
+    $(document).ready(function () {
+        //DATATABLE
+        //To display datatable without search and page length select, and to still have pagination work, instantiate like so
+        var oTable = $('#tabel').dataTable({
+
+            "ordering": true,
+            "searching": true,
+            "pageLength": 25,
+            "pagination": true,
+            // Date Sorting
+            columnDefs: [
+                {
+                    "targets": 0,
+                    "orderable": false,
+                    type: 'date-eu', targets: ([1])
+                }
+            ],
+
+            //// order table onload
+            "order": [[0, 'asc']],
+        });
+        //DATE RANGE
+        //set global vars that are set by daterange picker, to be used by datatable
+        var startdate;
+        var enddate;
+
+        //instantiate datepicker and choose your format of the dates
+        $('#reportrange').daterangepicker({
+            ranges: {
+                'Toate': [moment().subtract(10, 'year'), moment().add(10, 'year')],
+                "Astazi": [moment(), moment()],
+                'Ieri': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Ultimele 7 zile': [moment().subtract(6, 'days'), moment()],
+                'Luna curenta': [moment().startOf('month'), moment().endOf('month')],
+                'Luna trecuta': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+            ,
+            "opens": "right",
+            format: 'YYYY/MM/DD',
+            dateLimit: { days: 60 },
+            locale: {
+                "format": "DD/MM/YYYY",
+                "separator": " - ",
+                "applyLabel": "Aplica",
+                "cancelLabel": "Anuleaza",
+                "fromLabel": "De la",
+                "toLabel": "Pana la",
+                "customRangeLabel": "Alege interval",
+                "daysOfWeek": [
+                    "Du",
+                    "Lu",
+                    "Ma",
+                    "Mi",
+                    "Jo",
+                    "Vi",
+                    "Sa"
+                ],
+                "monthNames": [
+                    "Ianuarie",
+                    "Februarie",
+                    "Martie",
+                    "Aprilie",
+                    "Mai",
+                    "Iunie",
+                    "Iulie",
+                    "August",
+                    "Septembrie",
+                    "Octombrie",
+                    "Noiembrie",
+                    "Decembrie"
+                ],
+                "firstDay": 1
+            },
+
+        },
+            function (start, end, label) {
+                var s = moment(start.toISOString());
+                var e = moment(end.toISOString());
+                startdate = s.format("YYYY-MM-DD");
+                enddate = e.format("YYYY-MM-DD");
+            });
+
+        $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
+            startdate = picker.startDate.format('YYYY-MM-DD');
+            enddate = picker.endDate.format('YYYY-MM-DD');
+            $.fn.dataTableExt.afnFiltering.push(
+                function (oSettings, aData, iDataIndex) {
+                    if (startdate != undefined) {
+                        var coldate = aData[1].split("/");
+                        var d = new Date(coldate[2], coldate[1] - 1, coldate[0]);
+                        var date = moment(d.toISOString());
+                        date = date.format("YYYY-MM-DD");
+
+                        dateMin = startdate.replace(/-/g, "");
+                        dateMax = enddate.replace(/-/g, "");
+                        date = date.replace(/-/g, "");
+
+
+                        if (dateMin == "" && date <= dateMax) {
+                            return true;
+                        }
+                        else if (dateMin == "" && date <= dateMax) {
+                            return true;
+                        }
+                        else if (dateMin <= date && "" == dateMax) {
+                            return true;
+                        }
+                        else if (dateMin <= date && date <= dateMax) {
+                            return true;
+                        }
+
+                        // all failed
+                        return false;
+                    }
+                }
+            );
+            oTable.fnDraw();
+        });
+
+
+
+        // DataTable
+        // var table = $('#tabel').DataTable();
+
+
+    });
+
+
+// </script>
+
+
+
+<table id="tabel" class="display" style="width:100%">
+    <thead>
+        <tr>
+            <th>Cabinet</th>
+            <th>
+                <div class="input-group">
+                    <input type="text" style="text-align: center;
+                    font-size: 13px;
+                    background-color: #337ab7;
+                    color: #fff;
+                    width: 169px; 
+                    
+                    cursor: pointer;" name="reportrange" id="reportrange" readonly="readonly" class="form-control" value="">
+                </div>
+            </th>
+            <th>Nume Pac</th>
+            <th>Inregistrat</th>
+            <th>Nume Pac</th>
+            <th>Sosit Logistic</th>
+            <th>Nume Pac</th>
+            <th>Sosit Service</th>
+            <th>Nume Pac</th>
+            <th>In Lucru</th>
+            <th>Nume Pac</th>
+            <th class="detalii"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="pacient in registru.pacienti">
+            <td>{{ pacient.postedBy }}</td>
+            <td style="text-align: center;">{{ pacient.created }}</td>
+            <td>{{ pacient.name }}</td>
+            <td>{{ pacient.created }}</td>
+            <td>{{ pacient.name }}</td>
+            <td>{{ pacient.cabinet }}</td>
+            <td>{{ pacient.name }}</td>
+            <td>{{ pacient.email }}</td>
+            <td>{{ pacient.name }}</td>
+            <td>{{ pacient.name }}</td>
+
+            <td>{{ pacient.updated_at }}</td>
+            <td>
+                <a href="/editPacient/{{ pacient._id }}">
+                    <button type="button" ng-show="registru.editPacientAccess" style="width: 100%;" class="btn btn-primary">Detalii</button>
+                </a>
+            </td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>Cabinet</th>
+            <th>Data Inregistrare</th>
+            <th>Nume Pac</th>
+            <th>Inregistrat</th>
+            <th>Nume Pac</th>
+            <th>Sosit Logistic</th>
+            <th>Nume Pac</th>
+            <th>Sosit Service</th>
+            <th>Nume Pac</th>
+            <th>In Lucru</th>
+            <th>Nume Pac</th>
+            <th class="detalii"></th>
+
+        </tr>
+    </tfoot>
+</table>
+</div>
+<br>
+<br>
+<!-- <div class="row show-hide-message" ng-show="registru.showMoreError">
+    <div class="alert alert-danger">{{ registru.showMoreError }}</div>
+</div> -->

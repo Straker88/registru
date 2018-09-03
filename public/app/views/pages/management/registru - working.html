@@ -2,15 +2,17 @@
 <script type="text/javascript" src="assets/js/daterangepicker.js"></script>
 
 
-<!-- <div class="page-header">
+<div class="page-header">
     <h1>Registru Service Clarfon</h1>
-</div> -->
+</div>
 
 <div class="jumbotron text-center" ng-show="registru.loading">
     <p>Se incarca...</p>
 </div>
 <div>
     <script>
+
+        var ajaxResult = [];
         $(document).ready(function () {
             var oTable = $('#tabel').dataTable({
                 ajax: {
@@ -22,23 +24,19 @@
                     "dataSrc": "pacienti",
                     "dataType": "json",
                 },
-
                 "stateSave": false,
                 "pageLength": 25,
                 "searching": true,
                 "pagination": true,
-                "serverSide": false,
-                "length": "100",
+                "bServerSide": false,
                 columns: [
+                    { data: "postedBy" },
+                    { data: "created" },
+                    { data: "name" },
+                    { data: "email" },
+                    { data: "permission" },
                     { data: "cabinet" },
-                    { data: "data_inregistrare" },
-                    { data: "nume" },
-                    { data: "denumire_aparat" },
-                    { data: "defectiune_reclamata" },
                     { data: "updated_at" },
-                    { data: "" },
-                    { data: "_id" }
-
                 ],
 
                 columnDefs: [
@@ -46,25 +44,12 @@
                         "targets": 0,
                         "orderable": true,
                         type: 'date-eu', targets: ([1]),
-                    },
-                    {
-                        "targets": [7],
-                        "className": "hide_column"
-                    },
-                    {
-                        "aTargets": [6],
-                        "mRender": function (data, type, row) {
-                            return '<a class="btn btn-info btn-sm" href=/editPacient/' + row._id + '>' + 'Detalii' + '</a>';
-                        }
                     }],
-
-
-
 
                 "order": [[1, 'desc']],
                 "oLanguage": {
-                    "sSearch": "Cautare generala",
-                    "sLengthMenu": "Afiseaza _MENU_ inregistrari",
+                    "sSearch": "Cautare",
+                    "sLengthMenu": "Arata _MENU_ inregistrari",
                 }
             });
 
@@ -72,19 +57,21 @@
             var enddate;
 
             $('#reportrange').daterangepicker({
+                locale: {
+                    format: 'YYYY-MM-DD'
+                },
                 ranges: {
-                    'Tot anul': [moment().startOf('year'), moment().endOf('year')],
+                    'Toate': [moment().subtract(10, 'year'), moment().add(10, 'year')],
                     "Astazi": [moment(), moment()],
                     'Ieri': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
                     'Ultimele 7 zile': [moment().subtract(6, 'days'), moment()],
                     'Luna curenta': [moment().startOf('month'), moment().endOf('month')],
-                    'Luna trecuta': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-                    'Ultimele 3 luni': [moment().subtract(3, 'month').startOf('month'), moment().endOf('month').endOf('month')],
-                    'Ultimele 6 luni': [moment().subtract(6, 'month').startOf('month'), moment().endOf('month').endOf('month')]
-                },
-                opens: "right",
+                    'Luna trecuta': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                }
+                ,
+                "opens": "right",
                 format: 'DD/MM/YYYY',
-                dateLimit: { days: 365 },
+                dateLimit: { days: 60 },
                 locale: {
                     "format": "DD/MM/YYYY",
                     "separator": " - ",
@@ -125,8 +112,9 @@
                     var e = moment.utc(end.toISOString());
                     startdate = s.format("YYYY-MM-DD");
                     enddate = e.format("YYYY-MM-DD");
-                });
 
+
+                });
 
             $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
                 startdate = picker.startDate.format('YYYY-MM-DD');
@@ -161,62 +149,63 @@
                         }
                     }
                 );
+
                 oTable.fnDraw();
             });
-
             $('#tabel .filters .FilterinputSearch').each(function () {
                 var title = $('#tabel thead .FilterinputSearch').eq($(this).index()).text();
-                $(this).html('<input type="text" placeholder="cautare" />');
+                $(this).html('<input type="text" placeholder="cauta" />');
             });
 
+            // DataTable
             var table = $('#tabel').DataTable();
 
-            table.columns([0, 2, 3, 4, 5]).eq(0).each(function (colIdx) {
+            // Apply the search
+            table.columns([0, 2, 3, 4, 6]).eq(0).each(function (colIdx) {
                 $('input', $('.filters th')[colIdx]).on('keyup change', function () {
                     table
                         .column(colIdx)
                         .search(this.value)
                         .draw();
                 });
+
+
+
             });
         });
     </script>
 </div>
+
 <br>
+
 <div>
 
     <table id="tabel" class="display" style="width:100%">
         <thead id="head2">
             <tr>
-                <th>Cabinet</th>
-                <th>Inregistrat</th>
-                <th>Nume - Prenume</th>
-                <th>Denumire Aparat</th>
-                <th>Defectiune</th>
+                <th>postedBy</th>
+                <th>created</th>
+                <th>name</th>
+                <th>email</th>
+                <th>permission</th>
+                <th>cabinet</th>
                 <th>updated_at</th>
-                <th style="display: none;">Detalii</th>
-                <th style="display: none;">id</th>
             </tr>
         </thead>
 
         <thead class="filters">
             <tr>
-                <th class="FilterinputSearch">Cabinet</th>
-                <th class="daterange">
-                    <div class="input-prepend input-group daterange"> <span style="background: #fff;letter-spacing: 0.1em;"
-                            class="add-on input-group-addon daterange">Alege interval <i class="glyphicon glyphicon-calendar fa fa-calendar daterange"></i></span>
-                        <p><input style="margin-left:5px;width: 155px;margin-top: 1px; font-size: 13px;text-align: center;border-radius: 4px;cursor: pointer;line-height: 29px;color: #08c;border: 1px solid #08c;"
-                                name="reportrange" id="reportrange" class="daterange" value="" readonly></p>
+                <th class="FilterinputSearch">postedBy</th>
+                <th>
+                    <div class="input-prepend input-group"> <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+                        <input style="width: 100px; font-size: 10px;" name="reportrange" id="reportrange" value="">
                     </div>
                 </th>
-                <th class="FilterinputSearch">Nume - Prenume</th>
-                <th class="FilterinputSearch">Denumire Aparat</th>
-                <th class="FilterinputSearch">Defectiune Reclamata</th>
-                <th class="FilterinputSearch">updated_at</th>
-                <th style="display: none;"></th>
-                <th style="display: none;"></th>
-
-
+                <th class="FilterinputSearch">name</th>
+                <th class="FilterinputSearch">email</th>
+                <th class="FilterinputSearch">permission</th>
+                <th class="FilterinputSearch">cabinet</th>
+                <th>updated_at</th>
             </tr>
         </thead>
 
@@ -225,23 +214,21 @@
 
         <tfoot>
             <tr>
-                <th>Cabinet</th>
-                <th>Inregistrat</th>
-                <th>Nume - Prenume</th>
-                <th>Denumire Aparat</th>
-                <th>Defectiune Reclamata</th>
+                <th>postedBy</th>
+                <th>cabinet </th>
+                <th>name</th>
+                <th>email</th>
+                <th>permission</th>
+                <th>created</th>
                 <th>updated_at</th>
-                <th style="display: none;">Detalii</th>
-                <th style="display: none;">id</th>
             </tr>
         </tfoot>
 
     </table>
 
 </div>
-
 <br>
 <br>
-<!-- <div class="row show-hide-message" ng-show="registru.showMoreError">
+<div class="row show-hide-message" ng-show="registru.showMoreError">
     <div class="alert alert-danger">{{ registru.showMoreError }}</div>
-</div> -->
+</div>

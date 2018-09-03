@@ -2,33 +2,78 @@ var User = require('../models/user');
 var Pacient = require('../models/pacient');
 var jwt = require('jsonwebtoken');
 var secret = 'harrypotter';
-
-
+var moment = require('moment');
 
 module.exports = function (router) {
 
     // Pacient Registration Route
 
-    var pacientiRoute = router.route('/pacienti');
-
-    pacientiRoute.post(function (req, res) {
+    router.post('/pacienti', function (req, res) {
         var pacient = new Pacient();
 
-        pacient.postedBy = req.body.postedBy;
-        pacient.name = req.body.name;
         pacient.cabinet = req.body.cabinet;
+        pacient.nume = req.body.nume;
+        pacient.denumire_aparat = req.body.denumire_aparat;
+        pacient.serie_aparat = req.body.serie_aparat;
+        pacient.defectiune_reclamata = req.body.defectiune_reclamata;
+        pacient.garantie = req.body.garantie;
+        pacient.cutie = req.body.cutie;
+        pacient.baterie = req.body.baterie;
+        pacient.mulaj = req.body.mulaj;
+        pacient.oliva = req.body.oliva;
+        pacient.observatii_cabinet = req.body.observatii_cabinet;
+        pacient.observatii_pacient = req.body.observatii_pacient;
+        pacient.iesit_cabinet = 'nespecificat';
+        pacient.predat_pacient = 'nespecificat';
+
+
+
+        pacient.postedBy = req.body.postedBy;
         pacient.email = req.body.email;
 
-        if (req.body.name == null || req.body.name == '') {
+        if (req.body.nume == null || req.body.nume == '') {
             res.json({ success: false, message: 'Completeaza Numele' });
-        } else {
+        }
+
+        if (req.body.denumire_aparat == null || req.body.denumire_aparat == '') {
+            res.json({ success: false, message: 'Completeaza Denumire Aparat' });
+        }
+
+        if (req.body.serie_aparat == null || req.body.serie_aparat == '') {
+            res.json({ success: false, message: 'Completeaza Serie Aparat' });
+        }
+
+        if (req.body.defectiune_reclamata == null || req.body.defectiune_reclamata == '') {
+            res.json({ success: false, message: 'Completeaza Defectiune Reclamata' });
+        }
+
+        if (req.body.garantie == null || req.body.garantie == '') {
+            res.json({ success: false, message: 'Alege optiune Garantie' });
+        }
+
+        if (req.body.cutie == null || req.body.cutie == '') {
+            res.json({ success: false, message: 'Alege optiune Cutie' });
+        }
+
+        if (req.body.baterie == null || req.body.baterie == '') {
+            res.json({ success: false, message: 'Alege optiune Baterie' });
+        }
+
+        if (req.body.mulaj == null || req.body.mulaj == '') {
+            res.json({ success: false, message: 'Alege optiune Mulaj' });
+        }
+
+        if (req.body.oliva == null || req.body.oliva == '') {
+            res.json({ success: false, message: 'Alege optiune Oliva' });
+        }
+
+
+        else {
             pacient.save(function (err) {
                 if (err) {
                     res.send('Eroare.');
                 } else {
-
-                    res.status(200);
-                    res.redirect('/registru');
+                    res.json({ success: true, message: 'Service adaugat cu succes.' });
                 }
 
             });
@@ -38,6 +83,7 @@ module.exports = function (router) {
     // User Registration Route
     router.post('/users', function (req, res) {
         var user = new User();
+
         user.username = req.body.username;
         user.password = req.body.password;
         user.email = req.body.email;
@@ -45,7 +91,7 @@ module.exports = function (router) {
         user.temporarytoken = jwt.sign({ username: user.username, email: user.email }, secret);
 
         if (req.body.username == null || req.body.username == '' || req.body.password == null || req.body.password == '' || req.body.email == null || req.body.email == '' || req.body.name == null || req.body.name == '') {
-            res.json({ success: false, message: 'Ensure username, email and password were provided' });
+            res.json({ success: false, message: 'Campurile username, email si parola sunt obligatorii' });
 
         } else {
             user.save(function (err) {
@@ -66,16 +112,16 @@ module.exports = function (router) {
                     } else if (err) {
                         if (err.code == 11000) {
                             if (err.errmsg[61] == "u") {
-                                res.json({ success: false, message: 'That Username is already taken' });
+                                res.json({ success: false, message: 'Username deja exista' });
                             } else if (err.errmsg[61] == "e") {
-                                res.json({ success: false, message: 'That Email is already taken' });
+                                res.json({ success: false, message: 'Adresa email deja exista' });
                             }
                         } else {
                             res.json({ succes: false, message: err });
                         }
                     }
                 } else {
-                    res.json({ success: true, message: 'user created!' });
+                    res.json({ success: true, message: 'Utilizator Adaugat!' });
                 }
             });
         }
@@ -88,17 +134,17 @@ module.exports = function (router) {
                 throw err;
             } else {
                 if (!user) {
-                    res.json({ success: false, message: 'Could not authenticate user' });
+                    res.json({ success: false, message: 'Nu s-a putut autentifica utilizatorul' });
                 } else if (user) {
                     if (!req.body.password) {
-                        res.json({ success: false, message: 'No password Provided' });
+                        res.json({ success: false, message: 'Parola trebuie introdusa' });
                     } else {
                         var validPassword = user.comparePassword(req.body.password);
                         if (!validPassword) {
-                            res.json({ success: false, message: 'Could not authenticate passwordsd' });
+                            res.json({ success: false, message: 'Parola introdusa nu este corecta' });
                         } else {
                             var token = jwt.sign({ username: user.username, email: user.email }, secret);
-                            res.json({ success: true, message: 'User authenticated!', token: token });
+                            res.json({ success: true, message: 'Utilizator autentificat', token: token });
                         }
                     }
                 }
@@ -124,6 +170,7 @@ module.exports = function (router) {
         }
 
     });
+
 
     router.post('/me', function (req, res) {
         res.send(req.decoded);
@@ -188,6 +235,8 @@ module.exports = function (router) {
                             res.json({ success: false, message: 'Users not found' });
                         } else {
                             res.json({ success: true, users: users, permission: mainUser.permission, currentUser: mainUser });
+                            if (req.body.username) user.username = req.body.username;
+
                         }
                     } else {
                         res.json({ success: false, message: 'Insufficient Permissions' });
@@ -197,7 +246,6 @@ module.exports = function (router) {
         });
     });
     //End Get Users
-
 
 
     //Pacienti
@@ -276,8 +324,19 @@ module.exports = function (router) {
 
     router.put('/editPacient', function (req, res) {
         var editPacient = req.body._id;
+        if (req.body.nume) var newNume = req.body.nume;
+        if (req.body.denumire_aparat) var newDenumire_Aparat = req.body.denumire_aparat;
         if (req.body.cabinet) var newCabinet = req.body.cabinet;
-        if (req.body.name) var newName = req.body.name;
+        if (req.body.serie_aparat) var newSerie_Aparat = req.body.serie_aparat;
+        if (req.body.defectiune_reclamata) var newDefectiune_Reclamata = req.body.defectiune_reclamata;
+        if (req.body.observatii_cabinet) var newObservatii_Cabinet = req.body.observatii_cabinet;
+        if (req.body.observatii_pacient) var newObservatii_Pacient = req.body.observatii_pacient;
+        if (req.body.iesit_cabinet) var newIesit_Cabinet = new moment().format('DD/MM/YYYY HH:mm');
+        if (req.body.predat_pacient) var newPredat_Pacient = new moment().format('DD/MM/YYYY HH:mm');
+
+
+
+
         if (req.body.email) var newEmail = req.body.email;
 
         Pacient.findOne({ username: req.body.username }, function (err, mainUser) {
@@ -285,19 +344,20 @@ module.exports = function (router) {
             if (!mainUser) {
                 res.json({ success: false, message: 'No user found' });
             } else {
-                if (newName) {
+
+                if (newNume) {
                     if (mainUser.permission === 'admin' || mainUser.permission === 'moderator') {
                         Pacient.findOne({ _id: editPacient }, function (err, pacient) {
                             if (err) throw err;
                             if (!pacient) {
                                 res.json({ success: false, message: 'No user found' });
                             } else {
-                                pacient.name = newName;
+                                pacient.nume = newNume;
                                 pacient.save(function (err) {
                                     if (err) {
                                         console.log(err);
                                     } else {
-                                        res.json({ success: true, message: 'Name has been updated!' });
+                                        res.json({ success: true, message: 'Numele a fost modificat' });
                                     }
                                 });
                             }
@@ -306,6 +366,167 @@ module.exports = function (router) {
                         res.json({ success: false, message: 'Insufficient Permissions' });
                     }
                 }
+
+
+                if (newDenumire_Aparat) {
+                    if (mainUser.permission === 'admin' || mainUser.permission === 'moderator') {
+                        Pacient.findOne({ _id: editPacient }, function (err, pacient) {
+                            if (err) throw err;
+                            if (!pacient) {
+                                res.json({ success: false, message: 'No user found' });
+                            } else {
+                                pacient.denumire_aparat = newDenumire_Aparat;
+                                pacient.save(function (err) {
+                                    if (err) {
+                                        console.log(err);
+                                    } else {
+                                        res.json({ success: true, message: 'Denumire Aparat a fost modificat' });
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        res.json({ success: false, message: 'Insufficient Permissions' });
+                    }
+                }
+
+
+
+                if (newSerie_Aparat) {
+                    if (mainUser.permission === 'admin' || mainUser.permission === 'moderator') {
+                        Pacient.findOne({ _id: editPacient }, function (err, pacient) {
+                            if (err) throw err;
+                            if (!pacient) {
+                                res.json({ success: false, message: 'No user found' });
+                            } else {
+                                pacient.serie_aparat = newSerie_Aparat;
+                                pacient.save(function (err) {
+                                    if (err) {
+                                        console.log(err);
+                                    } else {
+                                        res.json({ success: true, message: 'Serie Aparat a fost adaugata' });
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        res.json({ success: false, message: 'Insufficient Permissions' });
+                    }
+                }
+
+                if (newDefectiune_Reclamata) {
+                    if (mainUser.permission === 'admin' || mainUser.permission === 'moderator') {
+                        Pacient.findOne({ _id: editPacient }, function (err, pacient) {
+                            if (err) throw err;
+                            if (!pacient) {
+                                res.json({ success: false, message: 'No user found' });
+                            } else {
+                                pacient.defectiune_reclamata = newDefectiune_Reclamata;
+                                pacient.save(function (err) {
+                                    if (err) {
+                                        console.log(err);
+                                    } else {
+                                        res.json({ success: true, message: 'Defectiune Reclamata a fost adaugata' });
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        res.json({ success: false, message: 'Insufficient Permissions' });
+                    }
+                }
+
+                if (newObservatii_Cabinet) {
+                    if (mainUser.permission === 'admin' || mainUser.permission === 'moderator') {
+                        Pacient.findOne({ _id: editPacient }, function (err, pacient) {
+                            if (err) throw err;
+                            if (!pacient) {
+                                res.json({ success: false, message: 'No user found' });
+                            } else {
+                                pacient.observatii_cabinet = newObservatii_Cabinet;
+                                pacient.save(function (err) {
+                                    if (err) {
+                                        console.log(err);
+                                    } else {
+                                        res.json({ success: true, message: 'Observatii Cabinet a fost modificat' });
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        res.json({ success: false, message: 'Insufficient Permissions' });
+                    }
+                }
+
+                if (newObservatii_Pacient) {
+                    if (mainUser.permission === 'admin' || mainUser.permission === 'moderator') {
+                        Pacient.findOne({ _id: editPacient }, function (err, pacient) {
+                            if (err) throw err;
+                            if (!pacient) {
+                                res.json({ success: false, message: 'No user found' });
+                            } else {
+                                pacient.observatii_pacient = newObservatii_Pacient;
+                                pacient.save(function (err) {
+                                    if (err) {
+                                        console.log(err);
+                                    } else {
+                                        res.json({ success: true, message: 'Observatii Pacient a fost modificat' });
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        res.json({ success: false, message: 'Insufficient Permissions' });
+                    }
+                }
+
+
+
+                if (newIesit_Cabinet) {
+                    if (mainUser.permission === 'admin' || mainUser.permission === 'moderator') {
+                        Pacient.findOne({ _id: editPacient }, function (err, pacient) {
+                            if (err) throw err;
+                            if (!pacient || pacient.iesit_cabinet !== 'nespecificat') {
+                                res.json({ success: false, message: 'Data a fost deja adaugata, modificarile nu sunt salvate' });
+                            } else {
+                                pacient.iesit_cabinet = newIesit_Cabinet;
+                                pacient.save(function (err) {
+                                    if (err) {
+                                        console.log(err);
+                                    } else {
+                                        res.json({ success: true, message: 'Data adaugata cu succes' });
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        res.json({ success: false, message: 'Insufficient Permissions' });
+                    }
+                }
+
+                if (newPredat_Pacient) {
+                    if (mainUser.permission === 'admin' || mainUser.permission === 'moderator') {
+                        Pacient.findOne({ _id: editPacient }, function (err, pacient) {
+                            if (err) throw err;
+                            if (!pacient || pacient.predat_pacient !== 'nespecificat') {
+                                res.json({ success: false, message: 'Data a fost deja adaugata, modificarile nu sunt salvate' });
+                            } else {
+                                pacient.predat_pacient = newPredat_Pacient;
+                                pacient.save(function (err) {
+                                    if (err) {
+                                        console.log(err);
+                                    } else {
+                                        res.json({ success: true, message: 'Data adaugata cu succes' });
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        res.json({ success: false, message: 'Insufficient Permissions' });
+                    }
+                }
+
+
 
                 if (newCabinet) {
                     if (mainUser.permission === 'admin' || mainUser.permission === 'moderator') {
@@ -319,7 +540,7 @@ module.exports = function (router) {
                                     if (err) {
                                         console.log(err);
                                     } else {
-                                        res.json({ success: true, message: 'Cabinet has been updated!' });
+                                        res.json({ success: true, message: 'Cabinet a fost modificat' });
                                     }
                                 });
                             }
@@ -341,7 +562,7 @@ module.exports = function (router) {
                                     if (err) {
                                         console.log(err);
                                     } else {
-                                        res.json({ success: true, message: 'Email has been updated!' });
+                                        res.json({ success: true, message: 'Email  a fost modificat' });
                                     }
                                 });
                             }

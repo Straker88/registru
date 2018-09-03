@@ -1,53 +1,120 @@
 <div class="page-header">
-  <h1>Inregistrare Service</h1>
+  <h1 style="color:#337ab7;">Inregistrare Service</h1>
 </div>
 
-<form name="regPacForm" ng-submit="registerPac.regPacient(regData, regPacForm.$valid);" novalidate>
-
-  <div class="form-row">
-
-    <div class="form-group col-md-2">
-      <label for="Cabinet">Cabinet</label>
-      <input readonly ng-init="registerPac.regData.postedBy=main.username" type="text" class="form-control" name="postedBy" ng-model="registerPac.regData.postedBy">
-    </div>
-    <div class="form-group col-md-2">
-      <label for="Nume">Nume</label>
-      <input type="text" class="form-control" name="name" placeholder="Nume" ng-model="registerPac.regData.name">
-    </div>
-    <div class="form-group col-md-2">
-      <label for="Prenume">Prenume</label>
-      <input type="text" class="form-control" name="cabinet" placeholder="Cabinet" ng-model="registerPac.regData.cabinet">
-    </div>
-    <div class="form-group col-md-2">
-      <label for="Email">Email</label>
-      <input type="text" class="form-control" name="email" placeholder="Email" ng-model="registerPac.regData.email">
-    </div>
-
-  </div>
-  <br>
-  <br>
-  <br>
-  <br>
-  <button ng-disabled="registerPac.disabled" class="btn btn-primary" type="submit">Adauga</button>
-
-</form>
-
-<br>
-
-<div class="jumbotron text-center" ng-show="registerPac.loading">
-
-  <span class="glyphicon glyphicon-repeat spinner"></span>
-  <p>Loading...</p>
-
-</div>
-
-<br>
-<div class="row show-hide-message" ng-show="registerPac.successMsg">
+<div id="regPacAlert" class="row show-hide-message" ng-show="registerPac.successMsg">
   <div class="alert alert-success">{{ registerPac.successMsg }}</div>
 </div>
 
 <br>
 
-<div class="row show-hide-message" ng-show="registerPac.errorMsg">
-  <div class="alert alert-danger">{{ registerPac.errorMsg }}</div>
+<div id="regPacAlert" style="font-size:14px;margin-bottom: 20px;" class=" row show-hide-message " ng-show="registerPac.errorMsg ">
+  <div class="alert alert-danger ">{{ registerPac.errorMsg }}</div>
+</div>
+<form name="regPacForm" ng-submit="registerPac.regPacient(regData, regPacForm.$valid);">
+
+  <div class="form-row">
+
+    <div class="regPacForm">
+      <label for="Cabinet">Cabinet: </label>
+      <input readonly ng-init="registerPac.regData.cabinet=main.username" type="text" class="form-control" name="cabinet" ng-model="registerPac.regData.cabinet">
+    </div>
+
+
+    <div class="regPacForm">
+      <label for="Nume">Nume - Prenume: </label>
+      <input type="text" class="form-control" name="nume" placeholder="Nume - Prenume" ng-model="registerPac.regData.nume" autocomplete="off">
+    </div>
+
+    <div class="regPacForm">
+      <label for="Denumire_Aparat">Denumire Aparat: </label>
+      <input type="text" class="form-control" name="denumire_aparat" placeholder="Denumire Aparat" ng-model="registerPac.regData.denumire_aparat"
+        autocomplete="off">
+    </div>
+
+    <div class="regPacForm">
+      <label for="Serie_Aparat">Serie Aparat: </label>
+      <input type="text" class="form-control" name="serie_aparat" placeholder="Serie Aparat" ng-model="registerPac.regData.serie_aparat"
+        autocomplete="off">
+    </div>
+
+    <div class="regPacForm">
+      <label for="Defectiune_Reclamata">Defectiune Reclamata: </label>
+      <input type="text" class="form-control" name="defectiune_reclamata" placeholder="Defectiune Reclamata" ng-model="registerPac.regData.defectiune_reclamata"
+        autocomplete="off">
+    </div>
+
+
+    <div class="regAccesorii" style="margin: 20px 0;">
+      <label for="Garantie">Garantie: </label>
+      <select ng-model="registerPac.regData.garantie" ng-class="registerPac.regData.garantie" style="height:34px;margin-right:20px;"
+        name="garantie">
+        <option value="" selected disabled hidden>Alege</option>
+        <option value="da">Da</option>
+        <option value="nu">Nu</option>
+      </select>
+      <label for="Cutie">Cutie: </label>
+      <select ng-model="registerPac.regData.cutie" ng-class="registerPac.regData.cutie" style="height:34px;margin-right:20px;"
+        name="cutie">
+        <option value="" selected disabled hidden>Alege</option>
+        <option value="da">Da</option>
+        <option value="nu">Nu</option>
+      </select>
+      <label for="Baterie">Baterie: </label>
+      <select ng-model="registerPac.regData.baterie" ng-class="registerPac.regData.baterie" style="height:34px;margin-right:20px;"
+        name="baterie">
+        <option value="" selected disabled hidden>Alege</option>
+        <option value="da">Da</option>
+        <option value="nu">Nu</option>
+      </select>
+      <label for="Mulaj">Mulaj: </label>
+      <select ng-model="registerPac.regData.mulaj" ng-class="registerPac.regData.mulaj" style="height:34px;margin-right:20px;"
+        name="mulaj">
+        <option value="" selected disabled hidden>Alege</option>
+        <option value="da">Da</option>
+        <option value="nu">Nu</option>
+      </select>
+      <label for="Oliva">Oliva: </label>
+      <select ng-model="registerPac.regData.oliva" ng-class="registerPac.regData.oliva" style="height:34px;" name="oliva">
+        <option value="" selected disabled hidden>Alege</option>
+        <option value="da">Da</option>
+        <option value="nu">Nu</option>
+      </select>
+    </div>
+
+
+    <div style="width: 50%;float: left;" class="regPacForm">
+      <label for="Observatii_Cabinet">Observatii Cabinet (optional)</label>
+      <input type="text" class="form-control" name="observatii_cabinet" placeholder="Ex: Faceplate crapat, lipsa usita, carcasa crapata, etc.."
+        ng-model="registerPac.regData.observatii_cabinet" autocomplete="off">
+    </div>
+
+    <div style="width: 50%;float: left;" class="regPacForm">
+      <label for="Observatii_Pacient">Observatii Pacient (optional)</label>
+      <input type="text" class="form-control" name="observatii_pacient" placeholder="Ex: Aude infundat, fluiera cateodata, intrerupe, etc.."
+        ng-model="registerPac.regData.observatii_pacient" autocomplete="off">
+    </div>
+
+
+  </div>
+
+  <button style="float: right;clear: both;" ng-disabled="registerPac.disabled" class="btn btn-info btn-sm" type="submit">Adauga</button>
+
+</form>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<div id="regPacAlert" class="row show-hide-message" ng-show="registerPac.successMsg">
+  <div class="alert alert-success">{{ registerPac.successMsg }}</div>
+</div>
+
+<br>
+
+<div id="regPacAlert" style="margin-bottom:150px;font-size:14px;" class=" row show-hide-message " ng-show="registerPac.errorMsg ">
+  <div class="alert alert-danger ">{{ registerPac.errorMsg }}</div>
 </div>
