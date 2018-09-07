@@ -1,31 +1,31 @@
 let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 let moment = require('moment');
-// moment.locale('ro')
 
 
 const PacientSchema = new Schema({
-    data_inregistrare: { type: String, default: () => new moment().format('DD/MM/YYYY') },
+    numar: { type: Number, },
     cabinet: { type: String },
     nume: { type: String },
     denumire_aparat: { type: String },
     serie_aparat: { type: String },
     defectiune_reclamata: { type: String },
+    constatare_cabinet: { type: String },
     garantie: { type: String },
     cutie: { type: String },
     baterie: { type: String },
     mulaj: { type: String },
     oliva: { type: String },
+    data_inregistrare: { type: String, default: () => new moment().format('DD/MM/YYYY') },
+    data_estimativa: { type: String, default: () => new moment().businessAdd(13).format('DD/MM/YYYY') },
     observatii_cabinet: { type: String },
     observatii_pacient: { type: String },
     iesit_cabinet: { type: String },
     predat_pacient: { type: String },
     sosit_cabinet: { type: String },
 
-    // postedBy: { type: String },
     email: { type: String, },
-    permission: { type: String, default: 'moderator' },
-    updated_at: { type: String }
+    updated_at: { type: String },
 });
 
 PacientSchema.pre('save', function (next) {
@@ -33,6 +33,13 @@ PacientSchema.pre('save', function (next) {
     this.updated_at = now;
     next()
 });
+
+// PacientSchema.pre('save', function (next) {
+//     numar = pacient._id;
+//     console.log("numar");
+//     next()
+// });
+
 
 module.exports = mongoose.model('Pacient', PacientSchema);
 

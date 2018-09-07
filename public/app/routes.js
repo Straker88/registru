@@ -16,7 +16,9 @@ var app = angular.module('appRoutes', ['ngRoute'])
                 templateUrl: 'app/views/pages/users/register.html',
                 controller: 'regCtrl',
                 controllerAs: 'register',
-                authenticated: false
+                authenticated: true,
+                permission: ['admin']
+
             })
 
             .when('/login', {
@@ -31,6 +33,8 @@ var app = angular.module('appRoutes', ['ngRoute'])
 
             .when('/profile', {
                 templateUrl: 'app/views/pages/users/profile.html',
+                controller: 'registruCtrl',
+                controllerAs: 'registru',
                 authenticated: true
             })
 
@@ -39,7 +43,7 @@ var app = angular.module('appRoutes', ['ngRoute'])
                 controller: 'managementCtrl',
                 controllerAs: 'management',
                 authenticated: true,
-                permission: ['admin', 'moderator']
+                permission: ['admin']
 
             })
             .when('/edit/:id', {
@@ -58,6 +62,7 @@ var app = angular.module('appRoutes', ['ngRoute'])
                 controllerAs: 'registru',
                 authenticated: true,
 
+
             })
             //Pacient Registru
             .when('/editPacient/:id', {
@@ -74,6 +79,7 @@ var app = angular.module('appRoutes', ['ngRoute'])
                 controllerAs: 'registerPac',
                 authenticated: true
             })
+
             //Pacient Cautare
             .when('/search', {
                 templateUrl: 'app/views/pages/management/search.html',
@@ -82,8 +88,6 @@ var app = angular.module('appRoutes', ['ngRoute'])
                 authenticated: true,
                 permission: ['admin', 'moderator']
             })
-
-
 
             .otherwise({ redirectTo: '/' });
 
@@ -110,7 +114,7 @@ app.run(['$rootScope', 'Auth', '$location', 'User', function ($rootScope, Auth, 
                         if (next.$$route.permission[0] !== data.data.permission) {
                             if (next.$$route.permission[1] !== data.data.permission) {
                                 event.preventDefault();
-                                $location.path('/registru');
+                                $location.path('/');
                             }
                         }
                     });

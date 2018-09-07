@@ -50,9 +50,9 @@ angular.module('userServices', [])
             return $http.get('/api/editPacient/' + id);
         };
 
-        pacientFactory.getPostedPacient = function (postedBy) {
-            return $http.get('/api/editPacient/' + postedBy);
-        };
+        // pacientFactory.getPostedPacient = function (postedBy) {
+        //     return $http.get('/api/editPacient/' + postedBy);
+        // };
 
         pacientFactory.deletePacient = function (id) {
             return $http.delete('/api/registru/' + id);

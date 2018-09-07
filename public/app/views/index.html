@@ -10,12 +10,13 @@
   <meta name="author" content="">
 
   <script src="assets/js/jquery-3.3.1.js"></script>
-  <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment-with-locales.min.js"></script>
+  <script src="assets/js/momentjs-business.js"></script>
 
   <script src="assets/js/angular.js"></script>
   <script src="assets/js/angular-route.js"></script>
+  <script src="assets/js/directive.pagination.js"></script>
 
 
   <script src="app/app.js"></script>
@@ -43,9 +44,6 @@
           <li id="login">
             <a ng-show="!main.isLoggedIn" href="/login">Login</a>
           </li>
-          <li id="register">
-            <a ng-show="!main.isLoggedIn" href="/register">Register</a>
-          </li>
           <li>
             <a ng-show="main.isLoggedIn" href="/registru">Registru Service</a>
           </li>
@@ -53,10 +51,13 @@
             <a ng-show="main.isLoggedIn" href="/registerPac">Adauga Service</a>
           </li>
           <li>
-            <a ng-show="main.isLoggedIn && main.authorized" href="/management">Utilizatori</a>
+            <a ng-show="main.isLoggedIn" href="/profile">Inregistrarile mele</a>
+          </li>
+          <li id="register">
+            <a ng-show="main.authorized" href="/register">Inregistrare</a>
           </li>
           <li>
-            <a ng-show="main.isLoggedIn" href="/profile">Profil</a>
+            <a ng-show="main.authorized" href="/management">Utilizatori</a>
           </li>
           <li>
             <a ng-show="main.isLoggedIn" href="#" ng-click="main.logout();">Logout</a>
@@ -72,11 +73,13 @@
 
   <div class="container theme-showcase" role="main">
 
-    <div class="jumbotron">
+    <div class="jumbotron no-print">
+      <img style="float:right;margin-top: -50px;" src="/assets/img/clarfon_transparent.png">
+
       <h1 style="text-align: center;color: #5cb85c">Registru Service Clarfon</h1>
       <br>
-      <h2 style="color: #1789ab;text-align: right;">Utilizator : {{main.username}}</h2>
-      <p></p>
+
+      <h2 ng-show="main.isLoggedIn" style="color: #1789ab;text-align: right;">Utilizator : {{main.username}}</h2>
     </div>
 
     <div ng-view></div>

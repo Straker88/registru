@@ -281,43 +281,35 @@ angular.module('managementController', [])
 
     .controller('registruCtrl', function (User, Pacient, $scope, $routeParams) {
         var app = this;
-
         app.loading = true;
         app.accessDenied = true;
         app.errorMsg = false;
         app.editPacientAccess = false;
         app.deletePacientAccess = false;
+        $scope.data_estimativa = new moment().businessAdd(13).format('DD/MM/YYYY');
+        $scope.data_inregistrare = new moment().format('DD/MM/YYYY');
 
         (() => {
             User.getUsers().then(function (data) {
                 app.loading = false;
                 currentUser = data.data.currentUser.username;
-                currentUserPermission = data.data.permission;
-                return currentUser, currentUserPermission;
+                return currentUser;
             });
         })();
 
+
+
         function getPacienti() {
             Pacient.getPacienti().then(function (data) {
-                if (data.data.success) {
-                    if (currentUserPermission === 'admin' || currentUserPermission === 'moderator' || currentUserPermission === 'user') {
-                        app.pacienti = data.data.pacienti;
-                        app.editPacientAccess = true;
-                        if (currentUserPermission === 'admin') {
-                            app.deletePacientAccess = true;
-                        } else if (currentUserPermission === 'moderator' || currentUserPermission === 'user') {
-                            app.deletePacientAccess = false;
-                        }
-                    }
-                } else {
-                    app.errorMsg = data.data.message;
-                    app.loading = false;
-                }
+                app.pacienti = data.data.pacienti;
+                app.editPacientAccess = true;
 
             });
         }
 
         getPacienti();
+
+
 
         app.showMore = function (number) {
             app.showMoreError = false;
@@ -399,7 +391,6 @@ angular.module('managementController', [])
         var app = this;
         var eroare = 'Nu esti utilizatorul care a inregistrat acest service, modificarile nu sunt salvate';
 
-
         function getUsers() {
             User.getUsers().then(function (data) {
                 app.loading = false;
@@ -407,8 +398,9 @@ angular.module('managementController', [])
                 return currentUser;
             });
         }
-
         getUsers();
+
+
         Pacient.getPacient($routeParams.id).then(function (data) {
             if (data.data.success) {
                 $scope.newData_Inregistrare = data.data.pacient.data_inregistrare;
@@ -416,6 +408,7 @@ angular.module('managementController', [])
                 $scope.newDenumire_Aparat = data.data.pacient.denumire_aparat;
                 $scope.newSerie_Aparat = data.data.pacient.serie_aparat;
                 $scope.newDefectiune_Reclamata = data.data.pacient.defectiune_reclamata;
+                $scope.newConstatare_Cabinet = data.data.pacient.constatare_cabinet;
                 $scope.newGarantie = data.data.pacient.garantie;
                 $scope.newCutie = data.data.pacient.cutie;
                 $scope.newBaterie = data.data.pacient.baterie;
@@ -436,6 +429,7 @@ angular.module('managementController', [])
                 app.errorMsg = data.data.message;
             }
         });
+
 
         app.updateNume = function (newNume, valid) {
             app.errorMsgNume = false;
@@ -472,7 +466,7 @@ angular.module('managementController', [])
                     }, 3000);
                 }
             } else {
-                app.errorMsgNume = 'Please ensure form is filled out properly';
+                app.errorMsgNume = 'Acest camp trebuie completat';
                 app.disabled = false;
             }
         };
@@ -513,7 +507,7 @@ angular.module('managementController', [])
                     }, 3000);
                 }
             } else {
-                app.errorMsgDenumire_Aparat = 'Please ensure form is filled out properly';
+                app.errorMsgDenumire_Aparat = 'Acest camp trebuie completat';
                 app.disabled = false;
             }
         };
@@ -714,7 +708,7 @@ angular.module('managementController', [])
                     }, 3000);
                 }
             } else {
-                app.errorMsgIesit_Cabinet = 'Please ensure form is filled out properly';
+                app.errorMsgIesit_Cabinet = 'Acest camp trebuie completat';
                 app.disabled = false;
             }
         };
@@ -759,7 +753,7 @@ angular.module('managementController', [])
                     }, 3000);
                 }
             } else {
-                app.errorMsgPredat_Pacient = 'Please ensure form is filled out properly';
+                app.errorMsgPredat_Pacient = 'Acest camp trebuie completat';
                 app.disabled = false;
             }
         };
@@ -789,7 +783,7 @@ angular.module('managementController', [])
                     }
                 });
             } else {
-                app.errorMsg = 'Please ensure form is filled out properly';
+                app.errorMsg = 'Acest camp trebuie completat';
                 app.disabled = false;
             }
         };
@@ -818,7 +812,7 @@ angular.module('managementController', [])
                     }
                 });
             } else {
-                app.errorMsg = 'Please ensure form is filled out properly';
+                app.errorMsg = 'Acest camp trebuie completat';
                 app.disabled = false;
             }
         };

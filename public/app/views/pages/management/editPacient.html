@@ -16,148 +16,68 @@
     );
 </script>
 
-<div class="container">
-    <div class="row">
-        <div class="col-sm-12">
-            <div style="margin-bottom:30px;">
-                <a class="btn btn-info btn-sm" style="float:right;" href="http://localhost:8080/registru">Inapoi la Registru</a>
+<div class="row">
+    <div class="col-sm-12">
+        <div style="margin-bottom:30px;">
+            <a class="btn btn-info btn-sm hidden-print" style="float:right;" href="http://localhost:8080/registru">Inapoi
+                la Registru</a>
+            <h3 class="hidden-print" style="color:#337ab7;border-bottom: 1px solid">Inregistrat de Cabinet: <span style="font-size: 30px;"><input
+                        style="border: none;" ng-model="newCabinet" readonly></span></h3>
 
-                <h3 style="color:#337ab7;border-bottom: 1px solid">Completeaza Cabinet: <span style="font-size: 30px;"><input
-                            style="border: none;" ng-model="newCabinet" readonly></span></h3>
-                <br>
+            <br>
 
-                <div class="accesorii">
-                    <form class="optiuni" novalidate>
-                        <label>Garantie:</label>
-                        <input readonly class="form-control" ng-class="newGarantie" name="garantie" ng-model="newGarantie" required>
-                    </form>
-                    <form class="optiuni" novalidate>
-                        <label>Cutie:</label>
-                        <input readonly class="form-control" ng-class="newCutie" name="cutie" ng-model="newCutie" required>
-                    </form>
-                    <form class="optiuni" novalidate>
-                        <label>Baterie:</label>
-                        <input readonly class="form-control" ng-class="newBaterie" name="baterie" ng-model="newBaterie" required>
-                    </form>
-                    <form class="optiuni" novalidate>
-                        <label>Mulaj:</label>
-                        <input readonly class="form-control" ng-class="newMulaj" name="mulaj" ng-model="newMulaj" required>
-                    </form>
-                    <form class="optiuni" novalidate>
-                        <label>Oliva:</label>
-                        <input readonly class="form-control" ng-class="newOliva" name="oliva" ng-model="newOliva" required>
-                    </form>
-                </div>
+            <h1 class="visible-print-block" style="color:#337ab7;text-decoration: underline;">Fisa Service Clarfon</h1>
 
+            <br>
 
-                <form style="width:15%;float:left;margin-right:10px;" name="editPacient.data_inregistrareForm" ng-submit="editPacient.updateData_Inregistrare(newData_Inregistrare, editPacient.data_inregistrareForm.data_inregistrare.$valid)"
-                    novalidate>
-                    <!-- Name -->
-                    <label>Data Inregistrare:</label>
-                    <input style="cursor: not-allowed;" class="form-control" type="text" name="data_inregistrare" ng-model="newData_Inregistrare"
-                        readonly>
+            <div class="accesorii">
+                <hr class="visible-print-block">
+
+                <form style="margin-top:-18px;" class="optiuni" novalidate>
+                    <label>Certif. Garantie:</label>
+                    <input readonly class="form-control" ng-class="newGarantie" name="garantie" ng-model="newGarantie" required>
                 </form>
-
-
-                <form style="width:35%;display: table;float: left;margin-right: 10px;" name="editPacient.numeForm" ng-submit="editPacient.updateNume(newNume, editPacient.numeForm.nume.$valid)"
-                    novalidate>
-                    <!-- Name -->
-                    <label>Nume / Prenume:</label>
-                    <input style="cursor: not-allowed;" class="form-control" type="text" name="nume" ng-model="newNume" readonly>
-
-                    <div class="row show-hide-message" ng-show="editPacient.errorMsgNume">
-                        <div class="alert alert-danger">{{ editPacient.errorMsgNume }}</div>
-                    </div>
-
+                <form class="optiuni" novalidate>
+                    <label>Cutie:</label>
+                    <input readonly class="form-control" ng-class="newCutie" name="cutie" ng-model="newCutie" required>
                 </form>
-                <form style="width:13%;display: table;" name="editPacient.predat_pacientForm" ng-submit="editPacient.updatePredat_Pacient(newPredat_Pacient, editPacient.predat_pacientForm.predat_pacient.$valid)"
-                    novalidate>
-                    <label>Data Predare Pacient:</label>
-                    <input style="pointer-events: none;" id="time-holder1" class="form-control" type="text" name="predat_pacient" ng-model="newPredat_Pacient"
-                        readonly>
-
-                    <button style="width: 100%;" ng-disabled="editPacient.disabled" class="btn btn-info btn-sm" type="submit" ng-model="newPredat_Pacient"
-                        name="predat_pacient" id="time1">Adauga</button>
-
-                    <div class="row show-hide-message" ng-show="editPacient.successMsgPredat_Pacient">
-                        <div class="alert alert-success">{{ editPacient.successMsgPredat_Pacient }}</div>
-                    </div>
-
-                    <div class="row show-hide-message" ng-show="editPacient.errorMsgPredat_Pacient">
-                        <div class="alert alert-danger">{{ editPacient.errorMsgPredat_Pacient }}</div>
-                    </div>
+                <form class="optiuni" novalidate>
+                    <label>Baterie:</label>
+                    <input readonly class="form-control" ng-class="newBaterie" name="baterie" ng-model="newBaterie" required>
+                </form>
+                <form class="optiuni" novalidate>
+                    <label>Mulaj:</label>
+                    <input readonly class="form-control" ng-class="newMulaj" name="mulaj" ng-model="newMulaj" required>
+                </form>
+                <form class="optiuni" novalidate>
+                    <label>Oliva:</label>
+                    <input readonly class="form-control" ng-class="newOliva" name="oliva" ng-model="newOliva" required>
                 </form>
 
             </div>
+            <hr class="visible-print-block">
 
-            <form id="submit1" style="width:15%;float:left;display: grid;margin-right: 10px;" name="editPacient.denumire_aparatForm"
-                ng-submit="editPacient.updateDenumire_Aparat(newDenumire_Aparat, editPacient.denumire_aparatForm.denumire_aparat.$valid)"
+            <form style="width:15%;float:left;margin-right:10px;" name="editPacient.data_inregistrareForm" ng-submit="editPacient.updateData_Inregistrare(newData_Inregistrare, editPacient.data_inregistrareForm.data_inregistrare.$valid)"
                 novalidate>
-                <label>Denumire aparat:</label>
-                <input id="submit-holder1" class="form-control" type="text" name="denumire_aparat" ng-model="newDenumire_Aparat" required
-                    autocomplete="off">
-
-                <div class="row show-hide-message" ng-show="editPacient.errorMsgDenumire_Aparat">
-                    <div class="alert alert-danger">{{ editPacient.errorMsgDenumire_Aparat }}</div>
-                </div>
-
-            </form>
-
-            <form id="submit2" style="width:15%;float:left;display: grid;margin-right: 10px;" name="editPacient.serie_aparatForm" ng-submit="editPacient.updateSerie_Aparat(newSerie_Aparat, editPacient.serie_aparatForm.serie_aparat.$valid)"
-                novalidate>
-                <label>Serie aparat:</label>
-                <input id="submit-holder2" class="form-control" type="text" name="serie_aparat" ng-model="newSerie_Aparat" required autocomplete="off">
-
-                <div class="row show-hide-message" ng-show="editPacient.errorMsgSerie_Aparat">
-                    <div class="alert alert-danger">{{ editPacient.errorMsgSerie_Aparat }}</div>
-                </div>
-
-            </form>
-
-            <form id="submit3" style="width:30%;float:left;display: grid;margin-right: 35px;" name="editPacient.defectiune_reclamataForm"
-                ng-submit="editPacient.updateDefectiune_Reclamata(newDefectiune_Reclamata, editPacient.defectiune_reclamataForm.defectiune_reclamata.$valid)"
-                novalidate>
-                <label>Defectiune reclamata:</label>
-                <input id="submit-holder3" class="form-control" type="text" name="defectiune_reclamata" ng-model="newDefectiune_Reclamata"
-                    required autocomplete="off">
-
-                <div class="row show-hide-message" ng-show="editPacient.errorMsgDefectiune_Reclamata">
-                    <div class="alert alert-danger">{{ editPacient.errorMsgDefectiune_Reclamata }}</div>
-                </div>
-
-            </form>
-
-            <hr class="vertical_right" />
-
-
-            <form style="width:13%;display: table;float:left;" name="editPacient.iesit_cabinetForm" ng-submit="editPacient.updateIesit_Cabinet(newIesit, editPacient.iesit_cabinetForm.iesit_cabinet.$valid)"
-                novalidate>
-                <label>Trimis catre Logistic:</label>
-                <input style="pointer-events: none;" id="time-holder2" class="form-control" type="text" name="iesit_cabinet" ng-model="newIesit_Cabinet"
+                <!-- Name -->
+                <label>Data Inregistrare:</label>
+                <input style="cursor: not-allowed;" class="form-control" type="text" name="data_inregistrare" ng-model="newData_Inregistrare"
                     readonly>
-
-                <button style="width: 100%;" ng-disabled="editPacient.disabled" class="btn btn-info btn-sm" type="submit" name="iesit_cabinet"
-                    id="time2">Adauga</button>
-
-                <div class="row show-hide-message" ng-show="editPacient.successMsgIesit_Cabinet">
-                    <div class="alert alert-success">{{ editPacient.successMsgIesit_Cabinet }}</div>
-                </div>
-
-                <div class="row show-hide-message" ng-show="editPacient.errorMsgIesit_Cabinet">
-                    <div class="alert alert-danger">{{ editPacient.errorMsgIesit_Cabinet }}</div>
-                </div>
             </form>
-
-            <hr class="vertical_left" />
-
-            <form style="width:13%;display: table;float: right;" name="editPacient.predat_pacientForm" ng-submit="editPacient.updatePredat_Pacient(newPredat_Pacient, editPacient.predat_pacientForm.predat_pacient.$valid)"
+            <form style="width:35%;display: table;float: left;margin-right: 10px;" name="editPacient.numeForm" ng-submit="editPacient.updateNume(newNume, editPacient.numeForm.nume.$valid)"
                 novalidate>
-                <label>Sosit de la Logistic:</label>
-                <input style="pointer-events: none;" id="time-holder3" class="form-control" type="text" name="predat_pacient" ng-model="newPredat_Pacient"
-                    readonly>
+                <!-- Name -->
+                <label>Nume / Prenume Pacient:</label>
+                <input style="cursor: not-allowed;" class="form-control" type="text" name="nume" ng-model="newNume" readonly>
+            </form>
+            <form style="width:13%;display: table;" name="editPacient.predat_pacientForm" ng-submit="editPacient.updatePredat_Pacient(newPredat_Pacient, editPacient.predat_pacientForm.predat_pacient.$valid)"
+                novalidate>
+                <label>Data Predare Pacient:</label>
+                <input style="pointer-events: none;" id="time-holder1" class="form-control hidden-print" type="text" name="predat_pacient"
+                    ng-model="newPredat_Pacient" readonly>
 
-                <button style="width: 100%;" ng-disabled="editPacient.disabled" class="btn btn-info btn-sm" type="submit" ng-model="newPredat_Pacient"
-                    name="predat_pacient" id="time3">Adauga</button>
+                <button style="width: 100%;" ng-disabled="editPacient.disabled" class="btn btn-info btn-sm hidden-print" type="submit" ng-model="newPredat_Pacient"
+                    name="predat_pacient" id="time1">Adauga</button>
 
                 <div class="row show-hide-message" ng-show="editPacient.successMsgPredat_Pacient">
                     <div class="alert alert-success">{{ editPacient.successMsgPredat_Pacient }}</div>
@@ -167,254 +87,294 @@
                     <div class="alert alert-danger">{{ editPacient.errorMsgPredat_Pacient }}</div>
                 </div>
             </form>
-        </div>
-
-    </div>
-
-
-    <div class="row">
-        <div class="col-sm-12">
-            <form id="submit4" style="width:50%; display: table;float:left;" name="editPacient.observatii_cabinetForm" ng-submit="editPacient.updateObservatii_Cabinet(newObservatii_Cabinet,
-        editPacient.observatii_cabinetForm.observatii_cabinet.$valid)" novalidate>
-                <label>Observatii Cabinet:</label>
-                <textarea id="submit-holder4" style="resize: none;" class="form-control" type="text" name="observatii_cabinet" placeholder="Ex: Faceplate crapat, lipsa usita, carcasa crapata, etc.."
-                    ng-model="newObservatii_Cabinet" required autocomplete="off"></textarea>
-
-                <div class="row show-hide-message" ng-show="editPacient.errorMsgObservatii_Cabinet">
-                    <div class="alert alert-danger">{{ editPacient.errorMsgObservatii_Cabinet }}</div>
-                </div>
-            </form>
-
-            <form id="submit5" style="width:49%; display: table;margin: 0 auto;" name="editPacient.observatii_pacientForm" ng-submit="editPacient.updateObservatii_Pacient(newObservatii_Pacient,
-        editPacient.observatii_pacientForm.observatii_pacient.$valid)" novalidate>
-                <label>Observatii Pacient:</label>
-                <textarea id="submit-holder5" style="resize: none;" class="form-control" type="text" name="observatii_pacient" placeholder="Ex: Aude infundat, fluiera cateodata, intrerupe, etc.."
-                    ng-model="newObservatii_Pacient" required autocomplete="off"></textarea>
-
-                <div class="row show-hide-message" ng-show="editPacient.errorMsgObservatii_Pacient">
-                    <div class="alert alert-danger">{{ editPacient.errorMsgObservatii_Pacient }}</div>
-                </div>
-            </form>
-        </div>
-    </div>
-
-
-    <br>
-    <br>
-    <br>
-    <br>
-
-
-    <div class="row">
-        <div class="col-sm-12">
-
-            <h3 style="color:#337ab7;border-bottom: 1px solid">Completeaza Logistic | Nume Pacient: <input style="border: none;"
-                    ng-model="newNume" readonly></span></h3>
-
-            <br>
-            <br>
-            <br>
-
-            <form class="logisticForm" name="editPacient.predat_pacientForm" ng-submit="editPacient.updatePredat_Pacient(newPredat_Pacient, editPacient.predat_pacientForm.predat_pacient.$valid)"
-                novalidate>
-                <label>Sosit din Cabinet:</label>
-                <input style="pointer-events: none;" id="time-holder4" class="form-control" type="text" name="predat_pacient" ng-model="newPredat_Pacient"
-                    readonly>
-
-                <button style="width: 50%;" ng-disabled="editPacient.disabled" class="btn btn-info btn-sm" type="submit" ng-model="newPredat_Pacient"
-                    name="predat_pacient" id="time4">Adauga</button>
-
-                <div class="row show-hide-message" ng-show="editPacient.errorMsgPredat_Pacient">
-                    <div class="alert alert-danger">{{ editPacient.errorMsgPredat_Pacient }}</div>
-                </div>
-            </form>
-
-            <form class="logisticForm" name="editPacient.predat_pacientForm" ng-submit="editPacient.updatePredat_Pacient(newPredat_Pacient, editPacient.predat_pacientForm.predat_pacient.$valid)"
-                novalidate>
-                <label>Plecat catre Service:</label>
-                <input style="pointer-events: none;" id="time-holder5" class="form-control" type="text" name="predat_pacient" ng-model="newPredat_Pacient"
-                    readonly>
-
-                <button style="width: 50%;" ng-disabled="editPacient.disabled" class="btn btn-info btn-sm" type="submit" ng-model="newPredat_Pacient"
-                    name="predat_pacient" id="time5">Adauga</button>
-
-                <div class="row show-hide-message" ng-show="editPacient.errorMsgPredat_Pacient">
-                    <div class="alert alert-danger">{{ editPacient.errorMsgPredat_Pacient }}</div>
-                </div>
-            </form>
-
-            <form class="logisticForm" name="editPacient.predat_pacientForm" ng-submit="editPacient.updatePredat_Pacient(newPredat_Pacient, editPacient.predat_pacientForm.predat_pacient.$valid)"
-                novalidate>
-                <label>Preluat din Service:</label>
-                <input style="pointer-events: none;" id="time-holder6" class="form-control" type="text" name="predat_pacient" ng-model="newPredat_Pacient"
-                    readonly>
-
-                <button style="width: 50%;" ng-disabled="editPacient.disabled" class="btn btn-info btn-sm" type="submit" ng-model="newPredat_Pacient"
-                    name="predat_pacient" id="time6">Adauga</button>
-
-                <div class="row show-hide-message" ng-show="editPacient.errorMsgPredat_Pacient">
-                    <div class="alert alert-danger">{{ editPacient.errorMsgPredat_Pacient }}</div>
-                </div>
-            </form>
-
-            <form class="logisticForm" name="editPacient.predat_pacientForm" ng-submit="editPacient.updatePredat_Pacient(newPredat_Pacient, editPacient.predat_pacientForm.predat_pacient.$valid)"
-                novalidate>
-                <label>Trimis catre Cabinet:</label>
-                <input style="pointer-events: none;" id="time-holder7" class="form-control" type="text" name="predat_pacient" ng-model="newPredat_Pacient"
-                    readonly>
-
-                <button style="width: 50%;" ng-disabled="editPacient.disabled" class="btn btn-info btn-sm" type="submit" ng-model="newPredat_Pacient"
-                    name="predat_pacient" id="time7">Adauga</button>
-
-                <div class="row show-hide-message" ng-show="editPacient.errorMsgPredat_Pacient">
-                    <div class="alert alert-danger">{{ editPacient.errorMsgPredat_Pacient }}</div>
-                </div>
-            </form>
 
         </div>
-    </div>
 
-    <br>
-    <br>
-    <br>
+        <form style="width:15%;float:left;display: grid;margin-right: 10px;" name="editPacient.denumire_aparatForm" novalidate>
+            <label>Denumire aparat:</label>
+            <input readonly class="form-control" type="text" name="denumire_aparat" ng-model="newDenumire_Aparat" required autocomplete="off">
+        </form>
 
+        <form style="width:15%;float:left;display: grid;margin-right: 10px;" name="editPacient.serie_aparatForm" novalidate>
+            <label>Serie aparat:</label>
+            <input readonly class="form-control" type="text" name="serie_aparat" ng-model="newSerie_Aparat" required autocomplete="off">
+        </form>
 
-    <div class="row">
-        <div class="col-sm-12">
+        <form style="width:30%;float:left;display: grid;margin-right: 35px;" name="editPacient.defectiune_reclamataForm" novalidate>
+            <label>Defectiune reclamata:</label>
+            <input readonly class="form-control" type="text" name="defectiune_reclamata" ng-model="newDefectiune_Reclamata" required
+                autocomplete="off">
+        </form>
 
-            <div style="display: block; position: relative;float: left;">
-                <h3 style="color:#337ab7;border-bottom: 1px solid">Completeaza Service | Nume Pacient: <input style="border: none;"
-                        ng-model="newNume" readonly></span></h3>
+        <hr class="vertical_right hidden-print" />
 
-                <br>
+        <form class="hidden-print" style="width:13%;display: table;float:left;" name="editPacient.iesit_cabinetForm" ng-submit="editPacient.updateIesit_Cabinet(newIesit, editPacient.iesit_cabinetForm.iesit_cabinet.$valid)"
+            novalidate>
+            <label>Trimis catre Logistic:</label>
+            <input style="pointer-events: none;" id="time-holder2" class="form-control" type="text" name="iesit_cabinet" ng-model="newIesit_Cabinet"
+                readonly>
 
-                <form style="width:10%;float:left;display: grid;" name="editPacient.numeForm" ng-submit="editPacient.updateName(newName, editPacient.numeForm.name.$valid)"
-                    novalidate>
-                    <label>Intrat Service:</label>
-                    <input class="form-control" type="text" name="name" placeholder="please enter name" ng-model="newName" required>
+            <button style="width: 100%;" ng-disabled="editPacient.disabled" class="btn btn-info btn-sm" type="submit" name="iesit_cabinet"
+                id="time2">Adauga</button>
 
-
-                    <div class="row show-hide-message" ng-show="editPacient.errorMsg">
-                        <div class="alert alert-danger">{{ editPacient.errorMsg }}</div>
-                    </div>
-
-
-                </form>
-
-
-
-                <form style="width:10%;float:left;display: grid;" name="editPacient.cabinetForm" ng-submit="editPacient.updateCabinet(newCabinet, editPacient.cabinetForm.cabinet.$valid)"
-                    novalidate>
-                    <label>In lucru:</label>
-                    <input class="form-control" type="text" name="cabinet" placeholder="please enter cabinet" ng-model="newCabinet" required>
-
-
-                    <div class="row show-hide-message" ng-show="editPacient.errorMsg">
-                        <div class="alert alert-danger">{{ editPacient.errorMsg }}</div>
-                    </div>
-
-
-
-                </form>
-
-                <form style="width:11%;float:left;display: grid;" name="editPacient.emailForm" ng-submit="editPacient.updateEmail(newEmail, editPacient.emailForm.email.$valid)"
-                    novalidate>
-                    <label>Reparatie finalizata:</label>
-                    <input class="form-control" type="text" name="email" placeholder="please enter email" ng-model="newEmail" required>
-
-                    <div class="row show-hide-message" ng-show="editPacient.errorMsg">
-                        <div class="alert alert-danger">{{ editPacient.errorMsg }}</div>
-                    </div>
-
-
-                </form>
-
-                <form style="width:15%;float:left;display: grid;" name="editPacient.emailForm" ng-submit="editPacient.updateEmail(newEmail, editPacient.emailForm.email.$valid)"
-                    novalidate>
-                    <label>Operatiuni efectuate:</label>
-                    <textarea style="z-index: 999;" class="form-control" type="text" name="email" placeholder="please enter email" ng-model="newEmail"></textarea>
-
-
-                    <div class="row show-hide-message" ng-show="editPacient.errorMsg">
-                        <div class="alert alert-danger">{{ editPacient.errorMsg }}</div>
-                    </div>
-
-
-                </form>
-
-                <form style="width:15%;float:left;display: grid;" name="editPacient.emailForm" ng-submit="editPacient.updateEmail(newEmail, editPacient.emailForm.email.$valid)"
-                    novalidate>
-                    <label>Piese inlocuite:</label>
-                    <textarea style="z-index: 998;" class="form-control" type="text" name="email" placeholder="please enter email" ng-model="newEmail"
-                        required></textarea>
-
-
-                    <div class="row show-hide-message" ng-show="editPacient.errorMsg">
-                        <div class="alert alert-danger">{{ editPacient.errorMsg }}</div>
-                    </div>
-
-
-                </form>
-
-                <form style="width:15%;float:left;display: grid;" name="editPacient.emailForm" ng-submit="editPacient.updateEmail(newEmail,
-        editPacient.emailForm.email.$valid)" novalidate>
-                    <label>Cod componente:</label>
-                    <textarea style="z-index: 997;" class="form-control" type="text" name="email" placeholder="please enter email" ng-model="newEmail"
-                        required></textarea>
-
-                    <div class="row show-hide-message" ng-show="editPacient.errorMsg">
-                        <div class="alert alert-danger">{{ editPacient.errorMsg }}</div>
-                    </div>
-
-
-                </form>
-
-
-                <form style="width:10%;float:left;display: grid;" name="editPacient.emailForm" ng-submit="editPacient.updateEmail(newEmail,
-        editPacient.emailForm.email.$valid)" novalidate>
-                    <label>Iesit din Service:</label>
-                    <input class="form-control" type="text" name="email" placeholder="please enter email" ng-model="newEmail" required>
-
-                    <div class="row show-hide-message" ng-show="editPacient.errorMsg">
-                        <div class="alert alert-danger">{{ editPacient.errorMsg }}</div>
-                    </div>
-
-
-                </form>
-
-                <form style="float:left;display: grid;" name="editPacient.emailForm" ng-submit="editPacient.updateEmail(newEmail, editPacient.emailForm.email.$valid)"
-                    novalidate>
-                    <label>Executant reparatie:</label>
-                    <select style="height:34px;" name="cars">
-                        <option value="" selected disabled hidden>Alege</option>
-                        <option value="volvo">Dobrica</option>
-                        <option value="saab">Iosif</option>
-                    </select>
-
-                    <div class="row show-hide-message" ng-show="editPacient.errorMsg">
-                        <div class="alert alert-danger">{{ editPacient.errorMsg }}</div>
-                    </div>
-
-
-                </form>
+            <div class="row show-hide-message" ng-show="editPacient.successMsgIesit_Cabinet">
+                <div class="alert alert-success">{{ editPacient.successMsgIesit_Cabinet }}</div>
             </div>
 
-            <div>
-                <form style="width:100%;display: grid; margin-bottom:50px;" name="editPacient.emailForm" ng-submit="editPacient.updateEmail(newEmail,
-        editPacient.emailForm.email.$valid)" novalidate>
-                    <label>Observatii:</label>
-                    <textarea style="z-index: 997;" class="form-control" type="text" name="email" placeholder="please enter email" ng-model="newEmail"
-                        required></textarea>
-
-                    <div class="row show-hide-message" ng-show="editPacient.errorMsg">
-                        <div class="alert alert-danger">{{ editPacient.errorMsg }}</div>
-                    </div>
-
-                </form>
+            <div class="row show-hide-message" ng-show="editPacient.errorMsgIesit_Cabinet">
+                <div class="alert alert-danger">{{ editPacient.errorMsgIesit_Cabinet }}</div>
             </div>
-            <a class="btn btn-info btn-sm" style="float:right;margin-bottom: 50px;" href="http://localhost:8080/registru">Inapoi
-                la Registru</a>
+        </form>
 
-        </div>
+        <hr class="vertical_left hidden-print" />
+
+        <form class="hidden-print" style="width:13%;display: table;float: right;" name="editPacient.predat_pacientForm" ng-submit="editPacient.updatePredat_Pacient(newPredat_Pacient, editPacient.predat_pacientForm.predat_pacient.$valid)"
+            novalidate>
+            <label>Sosit de la Logistic:</label>
+            <input style="pointer-events: none;" id="time-holder3" class="form-control" type="text" name="predat_pacient" ng-model="newPredat_Pacient"
+                readonly>
+
+            <button style="width: 100%;" ng-disabled="editPacient.disabled" class="btn btn-info btn-sm" type="submit" ng-model="newPredat_Pacient"
+                name="predat_pacient" id="time3">Adauga</button>
+
+            <div class="row show-hide-message" ng-show="editPacient.successMsgPredat_Pacient">
+                <div class="alert alert-success">{{ editPacient.successMsgPredat_Pacient }}</div>
+            </div>
+
+            <div class="row show-hide-message" ng-show="editPacient.errorMsgPredat_Pacient">
+                <div class="alert alert-danger">{{ editPacient.errorMsgPredat_Pacient }}</div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<hr class="visible-print-block">
+
+<div class="row">
+    <div class="col-sm-12">
+        <form style="width:50%; display: table;float:left;" name="editPacient.observatii_cabinetForm" novalidate>
+            <label>Observatii Cabinet:</label>
+            <textarea readonly id="submit-holder4" style="resize: none;" class="form-control" type="text" name="observatii_cabinet" placeholder="Nu s-a completat la inregistrare"
+                ng-model="newObservatii_Cabinet" required autocomplete="off"></textarea>
+        </form>
+
+        <form style="width:49%; display: table;margin: 0 auto;" name="editPacient.observatii_pacientForm" novalidate>
+            <label>Observatii Pacient:</label>
+            <textarea readonly id="submit-holder5" style="resize: none;" class="form-control" type="text" name="observatii_pacient" placeholder="Nu s-a completat la inregistrare"
+                ng-model="newObservatii_Pacient" required autocomplete="off"></textarea>
+        </form>
     </div>
 </div>
+
+<hr class="visible-print-block">
+
+<br>
+<br>
+<br>
+<br>
+
+<div class="row hidden-print">
+    <div class="col-sm-12">
+
+        <h3 style="color:#337ab7;border-bottom: 1px solid">Completeaza Logistic | Nume Pacient: <input style="border: none;"
+                ng-model="newNume" readonly></span></h3>
+
+        <br>
+        <br>
+        <br>
+
+        <form class="logisticForm" name="editPacient.predat_pacientForm" ng-submit="editPacient.updatePredat_Pacient(newPredat_Pacient, editPacient.predat_pacientForm.predat_pacient.$valid)"
+            novalidate>
+            <label>Sosit din Cabinet:</label>
+            <input style="pointer-events: none;" id="time-holder4" class="form-control" type="text" name="predat_pacient" ng-model="newPredat_Pacient"
+                readonly>
+
+            <button style="width: 50%;" ng-disabled="editPacient.disabled" class="btn btn-info btn-sm" type="submit" ng-model="newPredat_Pacient"
+                name="predat_pacient" id="time4">Adauga</button>
+
+            <div class="row show-hide-message" ng-show="editPacient.errorMsgPredat_Pacient">
+                <div class="alert alert-danger">{{ editPacient.errorMsgPredat_Pacient }}</div>
+            </div>
+        </form>
+
+        <form class="logisticForm" name="editPacient.predat_pacientForm" ng-submit="editPacient.updatePredat_Pacient(newPredat_Pacient, editPacient.predat_pacientForm.predat_pacient.$valid)"
+            novalidate>
+            <label>Plecat catre Service:</label>
+            <input style="pointer-events: none;" id="time-holder5" class="form-control" type="text" name="predat_pacient" ng-model="newPredat_Pacient"
+                readonly>
+
+            <button style="width: 50%;" ng-disabled="editPacient.disabled" class="btn btn-info btn-sm" type="submit" ng-model="newPredat_Pacient"
+                name="predat_pacient" id="time5">Adauga</button>
+
+            <div class="row show-hide-message" ng-show="editPacient.errorMsgPredat_Pacient">
+                <div class="alert alert-danger">{{ editPacient.errorMsgPredat_Pacient }}</div>
+            </div>
+        </form>
+
+        <form class="logisticForm" name="editPacient.predat_pacientForm" ng-submit="editPacient.updatePredat_Pacient(newPredat_Pacient, editPacient.predat_pacientForm.predat_pacient.$valid)"
+            novalidate>
+            <label>Preluat din Service:</label>
+            <input style="pointer-events: none;" id="time-holder6" class="form-control" type="text" name="predat_pacient" ng-model="newPredat_Pacient"
+                readonly>
+
+            <button style="width: 50%;" ng-disabled="editPacient.disabled" class="btn btn-info btn-sm" type="submit" ng-model="newPredat_Pacient"
+                name="predat_pacient" id="time6">Adauga</button>
+
+            <div class="row show-hide-message" ng-show="editPacient.errorMsgPredat_Pacient">
+                <div class="alert alert-danger">{{ editPacient.errorMsgPredat_Pacient }}</div>
+            </div>
+        </form>
+
+        <form class="logisticForm" name="editPacient.predat_pacientForm" ng-submit="editPacient.updatePredat_Pacient(newPredat_Pacient, editPacient.predat_pacientForm.predat_pacient.$valid)"
+            novalidate>
+            <label>Trimis catre Cabinet:</label>
+            <input style="pointer-events: none;" id="time-holder7" class="form-control" type="text" name="predat_pacient" ng-model="newPredat_Pacient"
+                readonly>
+
+            <button style="width: 50%;" ng-disabled="editPacient.disabled" class="btn btn-info btn-sm" type="submit" ng-model="newPredat_Pacient"
+                name="predat_pacient" id="time7">Adauga</button>
+
+            <div class="row show-hide-message" ng-show="editPacient.errorMsgPredat_Pacient">
+                <div class="alert alert-danger">{{ editPacient.errorMsgPredat_Pacient }}</div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<br>
+<br>
+<br>
+
+<div class="row">
+    <div class="col-sm-12">
+
+        <div style="display: block; position: relative;float: left;">
+            <h3 class="hidden-print" style="color:#337ab7;border-bottom: 1px solid">Completeaza Service | Nume Pacient:
+                <input style="border: none;" ng-model="newNume" readonly></span></h3>
+
+            <br>
+
+            <form style="width:10%;float:left;display: grid;" name="editPacient.numeForm" ng-submit="editPacient.updateName(newName, editPacient.numeForm.name.$valid)"
+                novalidate>
+                <label>Intrat Service:</label>
+                <input class="form-control" type="text" name="name" placeholder="please enter name" ng-model="newName" required>
+
+
+                <div class="row show-hide-message" ng-show="editPacient.errorMsg">
+                    <div class="alert alert-danger">{{ editPacient.errorMsg }}</div>
+                </div>
+
+            </form>
+
+            <form style="width:10%;float:left;display: grid;" name="editPacient.cabinetForm" ng-submit="editPacient.updateCabinet(newCabinet, editPacient.cabinetForm.cabinet.$valid)"
+                novalidate>
+                <label>In lucru:</label>
+                <input class="form-control" type="text" name="cabinet" placeholder="please enter cabinet" ng-model="newCabinet" required>
+
+
+                <div class="row show-hide-message" ng-show="editPacient.errorMsg">
+                    <div class="alert alert-danger">{{ editPacient.errorMsg }}</div>
+                </div>
+
+            </form>
+
+            <form style="width:11%;float:left;display: grid;" name="editPacient.emailForm" ng-submit="editPacient.updateEmail(newEmail, editPacient.emailForm.email.$valid)"
+                novalidate>
+                <label>Reparatie finalizata:</label>
+                <input class="form-control" type="text" name="email" placeholder="please enter email" ng-model="newEmail" required>
+
+                <div class="row show-hide-message" ng-show="editPacient.errorMsg">
+                    <div class="alert alert-danger">{{ editPacient.errorMsg }}</div>
+                </div>
+
+            </form>
+
+            <form style="width:15%;float:left;display: grid;" name="editPacient.emailForm" ng-submit="editPacient.updateEmail(newEmail, editPacient.emailForm.email.$valid)"
+                novalidate>
+                <label>Operatiuni efectuate:</label>
+                <textarea style="z-index: 999;" class="form-control" type="text" name="email" placeholder="please enter email" ng-model="newEmail"></textarea>
+
+
+                <div class="row show-hide-message" ng-show="editPacient.errorMsg">
+                    <div class="alert alert-danger">{{ editPacient.errorMsg }}</div>
+                </div>
+
+            </form>
+
+            <form style="width:15%;float:left;display: grid;" name="editPacient.emailForm" ng-submit="editPacient.updateEmail(newEmail, editPacient.emailForm.email.$valid)"
+                novalidate>
+                <label>Piese inlocuite:</label>
+                <textarea style="z-index: 998;" class="form-control" type="text" name="email" placeholder="please enter email" ng-model="newEmail"
+                    required></textarea>
+
+                <div class="row show-hide-message" ng-show="editPacient.errorMsg">
+                    <div class="alert alert-danger">{{ editPacient.errorMsg }}</div>
+                </div>
+
+            </form>
+
+            <form style="width:15%;float:left;display: grid;" name="editPacient.emailForm" ng-submit="editPacient.updateEmail(newEmail,
+        editPacient.emailForm.email.$valid)" novalidate>
+                <label>Cod componente:</label>
+                <textarea style="z-index: 997;" class="form-control" type="text" name="email" placeholder="please enter email" ng-model="newEmail"
+                    required></textarea>
+
+                <div class="row show-hide-message" ng-show="editPacient.errorMsg">
+                    <div class="alert alert-danger">{{ editPacient.errorMsg }}</div>
+                </div>
+
+            </form>
+
+            <form style="width:10%;float:left;display: grid;" name="editPacient.emailForm" ng-submit="editPacient.updateEmail(newEmail,
+        editPacient.emailForm.email.$valid)" novalidate>
+                <label>Iesit din Service:</label>
+                <input class="form-control" type="text" name="email" placeholder="please enter email" ng-model="newEmail" required>
+
+                <div class="row show-hide-message" ng-show="editPacient.errorMsg">
+                    <div class="alert alert-danger">{{ editPacient.errorMsg }}</div>
+                </div>
+
+            </form>
+
+            <form style="float:left;display: grid;" name="editPacient.emailForm" ng-submit="editPacient.updateEmail(newEmail, editPacient.emailForm.email.$valid)"
+                novalidate>
+                <label>Executant reparatie:</label>
+                <select style="height:34px;" name="cars">
+                    <option value="" selected disabled hidden>Alege</option>
+                    <option value="volvo">Dobrica</option>
+                    <option value="saab">Iosif</option>
+                </select>
+
+                <div class="row show-hide-message" ng-show="editPacient.errorMsg">
+                    <div class="alert alert-danger">{{ editPacient.errorMsg }}</div>
+                </div>
+
+            </form>
+        </div>
+
+        <div>
+            <form style="width:100%;display: grid; margin-bottom:50px;" name="editPacient.emailForm" ng-submit="editPacient.updateEmail(newEmail,
+        editPacient.emailForm.email.$valid)" novalidate>
+                <label>Observatii:</label>
+                <textarea style="z-index: 997;" class="form-control" type="text" name="email" placeholder="please enter email" ng-model="newEmail"
+                    required></textarea>
+
+                <div class="row show-hide-message" ng-show="editPacient.errorMsg">
+                    <div class="alert alert-danger">{{ editPacient.errorMsg }}</div>
+                </div>
+
+            </form>
+        </div>
+        <a class="btn btn-info btn-sm hidden-print" style="float:right;margin-bottom: 50px;" href="http://localhost:8080/registru">Inapoi
+            la Registru</a>
+
+    </div>
+</div>
+</div>
+
+
+<button style="float: right;clear: both;" ng-disabled="registerPac.disabled" class="btn btn-info btn-sm no-print" onclick="window.print()">Adauga</button>
+
+</form>

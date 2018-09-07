@@ -1,30 +1,199 @@
+<script type="text/javascript" src="assets/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="assets/js/daterangepicker.js"></script>
+
+
 <div class="page-header">
-    <h1>Profilul utilizatorului : {{ main.username }}</h1>
+    <h1 style="color: #1789ab;">Inregistrarile utilizatorului : {{ main.username }}</h1>
+</div>
+
+<div id="prof" class="jumbotron text-center">
+    <p>Se incarca...</p>
+
 </div>
 
 
-<div class="panel panel-info">
-    <div class="panel-heading" style="text-align: center;">
-        <strong>Profil Utilizator</strong>
-    </div>
+<br>
+<br>
 
+<br>
 
-    <table class="table">
-        <tr>
-            <td>
-                <strong>Nume Cabinet</strong>
-            </td>
-            <td>
-                <strong>Adresa Email</strong>
-            </td>
-        </tr>
-        <tr>
-            <td>{{ main.username }}</td>
-            <td>{{ main.useremail }}</td>
+<div style="margin-bottom:150px;" id="inreg">
 
-        </tr>
+    <table id="tabel" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Nume Pacient</th>
+                <th>Denumire Aparat </th>
+                <th>Defectiune Reclamata</th>
+                <th class="daterange" style="width:245px;">
+                    <div style="width: 245px;" class="input-prepend input-group daterange"> <span style="background: #fff;letter-spacing: 0.1em;"
+                            class="add-on input-group-addon daterange">Alege interval <i class="glyphicon glyphicon-calendar fa fa-calendar daterange"></i></span>
+                        <p><input style="border:none;margin-left:5px;margin-top: 1px; font-size: 13px;text-align: center;border-radius: 4px;cursor: pointer;line-height: 29px;color: #08c;"
+                                name="reportrange" id="reportrange" class="daterange" value="" readonly></p>
+                    </div>
+                </th>
+                <th>Data Trimis Logistic</th>
+                <th style="display: none;"></th>
+            </tr>
+        </thead>
+        <tbody>
 
+            <tr ng-repeat="pacient in registru.pacienti |filter: main.username">
+                <td>{{ pacient.nume }}</td>
+                <td>{{ pacient.denumire_aparat }}</td>
+                <td>{{ pacient.defectiune_reclamata }}</td>
+                <td>{{ pacient.data_inregistrare }}</td>
+                <td>{{ pacient.iesit_cabinet }}</td>
+                <td>
+                    <a href="/editPacient/{{ pacient._id }}">
+                        <button type="button" ng-show="registru.editPacientAccess" class="btn btn-primary">Detalii</button>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Nume Pacient</th>
+                <th>Denumire Aparat </th>
+                <th>Defectiune Reclamata</th>
+                <th>Data Inregistrare</th>
+                <th>Data Trimis Logistic</th>
+                <th style="display: none;"></th>
+            </tr>
+        </tfoot>
     </table>
 
-
 </div>
+
+<script>
+    setTimeout(function () {
+        $('#prof').fadeOut('slow');
+    }, 1000);
+
+    // $(function () {
+
+    //     $('#inreg').hide();
+
+    //     setTimeout(function () {
+    //         $('#inreg').fadeIn('fast');
+    //     }, 3500);
+
+    // });
+
+    $(document).ready(function () {
+        setTimeout(function () {
+
+            var oTable = $('#tabel').dataTable({
+                iDisplayLength: 10,
+                "pagination": true,
+                "processing": true,
+
+                "length": "100",
+                columnDefs: [
+                    {
+                        "targets": 3,
+                        "orderable": false,
+                        type: 'date-eu', targets: ([3]),
+                    },
+                ],
+                "order": [[1, 'desc']],
+                "oLanguage": {
+                    "sSearch": "Cautare generala",
+                    "sLengthMenu": "Afiseaza _MENU_ inregistrari",
+                }
+            });
+            var startdate;
+            var enddate;
+
+            $('#reportrange').daterangepicker({
+                ranges: {
+                    'Tot anul': [moment().startOf('year'), moment().endOf('year')],
+                    "Astazi": [moment(), moment()],
+                    'Ieri': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Ultimele 7 zile': [moment().subtract(6, 'days'), moment()],
+                    'Luna curenta': [moment().startOf('month'), moment().endOf('month')],
+                    'Luna trecuta': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                    'Ultimele 3 luni': [moment().subtract(3, 'month').startOf('month'), moment().endOf('month').endOf('month')],
+                    'Ultimele 6 luni': [moment().subtract(6, 'month').startOf('month'), moment().endOf('month').endOf('month')]
+                },
+                opens: "right",
+                format: 'DD/MM/YYYY',
+                dateLimit: { days: 365 },
+                locale: {
+                    "format": "DD/MM/YYYY",
+                    "separator": " - ",
+                    "applyLabel": "Aplica",
+                    "cancelLabel": "Anuleaza",
+                    "fromLabel": "De la",
+                    "toLabel": "Pana la",
+                    "customRangeLabel": "Alege interval",
+                    "daysOfWeek": [
+                        "Dum",
+                        "Luni",
+                        "Mar",
+                        "Mie",
+                        "Joi",
+                        "Vin",
+                        "Sam"
+                    ],
+                    "monthNames": [
+                        "Ianuarie",
+                        "Februarie",
+                        "Martie",
+                        "Aprilie",
+                        "Mai",
+                        "Iunie",
+                        "Iulie",
+                        "August",
+                        "Septembrie",
+                        "Octombrie",
+                        "Noiembrie",
+                        "Decembrie"
+                    ],
+                    "firstDay": 1
+                },
+
+            },
+                function (start, end, label) {
+                    var s = moment.utc(start.toISOString());
+                    var e = moment.utc(end.toISOString());
+                    startdate = s.format("YYYY-MM-DD");
+                    enddate = e.format("YYYY-MM-DD");
+                });
+            $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
+                startdate = picker.startDate.format('YYYY-MM-DD');
+                enddate = picker.endDate.format('YYYY-MM-DD');
+
+                $.fn.dataTableExt.afnFiltering.push(
+                    function (oSettings, aData, iDataIndex) {
+                        if (startdate != undefined) {
+                            var coldate = aData[3].split("/");
+                            var d = new Date(coldate[2], coldate[1] - 1, coldate[0]);
+                            var date = moment(d.toISOString());
+                            date = date.format("YYYY-MM-DD");
+                            dateMin = startdate.replace(/-/g, "");
+                            dateMax = enddate.replace(/-/g, "");
+                            date = date.replace(/-/g, "");
+
+                            if (dateMin == "" && date <= dateMax) {
+                                return true;
+                            }
+                            else if (dateMin == "" && date <= dateMax) {
+                                return true;
+                            }
+                            else if (dateMin <= date && "" == dateMax) {
+                                return true;
+                            }
+                            else if (dateMin <= date && date <= dateMax) {
+                                return true;
+                            }
+
+                            return false;
+                        }
+                    }
+                );
+                oTable.fnDraw();
+            });
+        }, 3000);
+    });
+</script>

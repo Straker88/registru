@@ -1,0 +1,83 @@
+<div class="page-header">
+    <h1>Profilul utilizatorului : {{ main.username }}</h1>
+</div>
+
+
+<div class="panel panel-info">
+    <div class="panel-heading" style="text-align: center;">
+        <strong>Profil Utilizator</strong>
+    </div>
+
+
+    <table class="table">
+        <tr>
+            <td>
+                <strong>Nume Cabinet</strong>
+            </td>
+            <td>
+                <strong>Adresa Email</strong>
+            </td>
+        </tr>
+        <tr>
+            <td>{{ main.username }}</td>
+            <td>{{ main.useremail }}</td>
+
+        </tr>
+
+    </table>
+
+
+</div>
+
+<div class="jumbotron text-center" ng-show="registru.loading">
+    <span class="glyphicon glyphicon-repeat spinner"></span>
+    <p>Se incarca...</p>
+
+</div>
+
+<br>
+
+<div class="row show-hide-message" ng-show="registru.showMoreError">
+    <div class="alert alert-danger">{{ registru.showMoreError }}</div>
+</div>
+
+
+<br>
+<br>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <strong>Inregistrarile mele</strong>
+    </div>
+    <table class="table">
+        <tr>
+            <th>Nume Pacient</th>
+            <th>Denumire Aparat</th>
+            <th>Defectiune Reclamata</th>
+            <th>Data Inregistrare</th>
+            <th>Trimis Logistic</th>
+            <th>Detalii</th>
+        </tr>
+        <tr ng-repeat="pacient in registru.pacienti | limitTo: registru.limit | filter: main.username">
+            <td>{{ pacient.nume }}</td>
+            <td>{{ pacient.denumire_aparat }}</td>
+            <td>{{ pacient.defectiune_reclamata }}</td>
+            <td>{{ pacient.data_inregistrare }}</td>
+            <td>{{ pacient.iesit_cabinet }}</td>
+
+            <td>
+                <a href="/editPacient/{{ pacient._id }}">
+                    <button type="button" ng-show="registru.editPacientAccess" class="btn btn-primary">Detalii</button>
+                </a>
+                <button type="button" ng-click="registru.deleteUser(pacient.username);" ng-show="registru.deleteAccess" class="btn btn-danger">Delete</button>
+            </td>
+        </tr>
+
+    </table>
+
+</div>
+
+<br>
+<br>
+<br>
+<br>

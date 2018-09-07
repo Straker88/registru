@@ -13,9 +13,10 @@ angular.module('pacientControllers', ['userServices'])
                     if (data.data.success) {
                         app.loading = false;
                         app.successMsg = data.data.message + '... Aplicatia se intoarce automat la Registru Inregistrari in 5 secunde';
-                        $timeout(function () {
-                            $location.path('/registru');
-                        }, 5000);
+                        // window.print();
+                        // $timeout(function () {
+                        //     $location.path('/registru');
+                        // }, 5000);
                     } else {
                         app.loading = false;
                         app.errorMsg = data.data.message;

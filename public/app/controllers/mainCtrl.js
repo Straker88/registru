@@ -5,32 +5,32 @@ angular.module('mainController', ['authServices', 'userServices'])
 
         app.loadme = false;
 
-        app.checkSession = function () {
-            if (Auth.isLoggedIn()) {
-                app.checkingSession = true;
-                var interval = $interval(function () {
-                    var token = $window.localStorage.getItem('token');
-                    if (token == null) {
-                        $interval.cancel(interval);
-                    } else {
-                        self.parseJWT = function (token) {
-                            var base64Url = token.split('.')[1];
-                            var base64 = base64Url.replace('.', '+').replace('_', '/');
-                            return JSON.parse($window.atob(base64));
-                        }
-                        var expireTime = self.parseJWT(token);
-                        var timeStamp = Math.floor(Date.now() / 1000);
-                        var timeCheck = expireTime.exp - timeStamp;
-                        if (timeCheck <= 25) {
-                            console.log('token-ul a expirat');
-                            $interval.cancel(interval);
-                        }
-                    }
-                }, 86400);
-            }
-        };
+        // app.checkSession = function () {
+        //     if (Auth.isLoggedIn()) {
+        //         app.checkingSession = true;
+        //         var interval = $interval(function () {
+        //             var token = $window.localStorage.getItem('token');
+        //             if (token == null) {
+        //                 $interval.cancel(interval);
+        //             } else {
+        //                 self.parseJWT = function (token) {
+        //                     var base64Url = token.split('.')[1];
+        //                     var base64 = base64Url.replace('.', '+').replace('_', '/');
+        //                     return JSON.parse($window.atob(base64));
+        //                 }
+        //                 var expireTime = self.parseJWT(token);
+        //                 var timeStamp = Math.floor(Date.now() / 1000);
+        //                 var timeCheck = expireTime.exp - timeStamp;
+        //                 if (timeCheck <= 25) {
+        //                     console.log('token-ul a expirat');
+        //                     $interval.cancel(interval);
+        //                 }
+        //             }
+        //         }, 86400);
+        //     }
+        // };
 
-        app.checkSession();
+        // app.checkSession();
 
         var exit = function (option) {
             app.choiceMade = false;
@@ -51,7 +51,7 @@ angular.module('mainController', ['authServices', 'userServices'])
             User.renewSession(app.username).then(function (data) {
                 if (data.data.success) {
                     AuthToken.setToken(data.data.token);
-                    app.checkSession();
+                    // app.checkSession();
                 } else {
                     app.modalBody = data.data.message;
                 }
@@ -72,7 +72,7 @@ angular.module('mainController', ['authServices', 'userServices'])
 
         $rootScope.$on('$routeChangeStart', function () {
 
-            if (!app.checkSession) app.checkSession();
+            // if (!app.checkSession) app.checkSession();
 
 
             if (Auth.isLoggedIn()) {
@@ -82,7 +82,7 @@ angular.module('mainController', ['authServices', 'userServices'])
                     app.useremail = data.data.email;
 
                     User.getPermission().then(function (data) {
-                        if (data.data.permission === 'admin' || data.data.permission === 'moderator') {
+                        if (data.data.permission === 'admin') {
                             app.authorized = true;
                             app.loadme = true;
                         } else {
@@ -113,7 +113,7 @@ angular.module('mainController', ['authServices', 'userServices'])
                         $location.path('/registru');
                         app.loginData = '';
                         app.successMsg = '';
-                        app.checkSession();
+                        // app.checkSession();
                     }, 2000);
                 } else {
                     app.loading = false;

@@ -1,3 +1,5 @@
 <div class="page-header">
-    <h1>Salut {{ main.username }} !</h1>
+    <div ng-show="main.isLoggedIn">
+        <h1>Salut {{ main.username }} !</h1>
+    </div>
 </div>

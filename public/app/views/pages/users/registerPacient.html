@@ -1,5 +1,10 @@
 <div class="page-header">
-  <h1 style="color:#337ab7;">Inregistrare Service</h1>
+  <img class="visible-print-block" style="float:right;" src="/assets/img/clarfon-logo.jpg">
+  <h1 style="display: inline-block;color:#337ab7;">Fisa Service Clarfon </h1>
+  <span class="visible-print-block" style="margin-left: 10px;font-size:14px;">Operator de date cu caracter personal nr. 23594
+  </span>
+  <h3 class="visible-print-block" style="display: inline-block;color:#337ab7;">I. Receptie Service: </h3>
+
 </div>
 
 <div id="regPacAlert" class="row show-hide-message" ng-show="registerPac.successMsg">
@@ -11,110 +16,179 @@
 <div id="regPacAlert" style="font-size:14px;margin-bottom: 20px;" class=" row show-hide-message " ng-show="registerPac.errorMsg ">
   <div class="alert alert-danger ">{{ registerPac.errorMsg }}</div>
 </div>
+
 <form name="regPacForm" ng-submit="registerPac.regPacient(regData, regPacForm.$valid);">
 
-  <div class="form-row">
+  <div class="row">
+    <div class="col-sm-12">
+      <div style="margin-bottom: 30px;">
+        <div class="regAccesorii" style="float:right;">
 
-    <div class="regPacForm">
-      <label for="Cabinet">Cabinet: </label>
-      <input readonly ng-init="registerPac.regData.cabinet=main.username" type="text" class="form-control" name="cabinet" ng-model="registerPac.regData.cabinet">
+          <div style="margin-top:-16px;" class="optiuni" novalidate>
+            <label for="Garantie">Certif. Garantie: </label>
+            <br>
+            <select ng-model="registerPac.regData.garantie" ng-class="registerPac.regData.garantie" style="height:34px;" name="garantie">
+              <option value="" selected disabled hidden>Alege</option>
+              <option value="da">Da</option>
+              <option value="nu">Nu</option>
+            </select>
+          </div>
+
+          <div class="optiuni" novalidate>
+            <label for="Cutie">Cutie: </label>
+            <br>
+            <select ng-model="registerPac.regData.cutie" ng-class="registerPac.regData.cutie" style="height:34px;" name="cutie">
+              <option value="" selected disabled hidden>Alege</option>
+              <option value="da">Da</option>
+              <option value="nu">Nu</option>
+            </select>
+          </div>
+
+          <div class="optiuni" novalidate>
+            <label for="Baterie">Baterie: </label>
+            <br>
+            <select ng-model="registerPac.regData.baterie" ng-class="registerPac.regData.baterie" style="height:34px;" name="baterie">
+              <option value="" selected disabled hidden>Alege</option>
+              <option value="da">Da</option>
+              <option value="nu">Nu</option>
+            </select>
+          </div>
+
+          <div class="optiuni" novalidate>
+            <label for="Mulaj">Mulaj: </label>
+            <br>
+            <select ng-model="registerPac.regData.mulaj" ng-class="registerPac.regData.mulaj" style="height:34px;" name="mulaj">
+              <option value="" selected disabled hidden>Alege</option>
+              <option value="da">Da</option>
+              <option value="nu">Nu</option>
+            </select>
+          </div>
+
+          <div class="optiuni" novalidate>
+            <label for="Oliva">Oliva: </label>
+            <br>
+            <select ng-model="registerPac.regData.oliva" ng-class="registerPac.regData.oliva" style="height:34px;" name="oliva">
+              <option value="" selected disabled hidden>Alege</option>
+              <option value="da">Da</option>
+              <option value="nu">Nu</option>
+            </select>
+          </div>
+        </div>
+
+
+        <div ng-controller="registruCtrl" style="width:15%;display: table; float:left;margin-right:10px;" class="regPacForm">
+          <label for="Data Inregistrare">Data Intrare: </label>
+          <input readonly ng-init="data_inregistrare" type="text" class="form-control" name="data_inregistrare" ng-model="data_inregistrare">
+        </div>
+
+        <div ng-controller="registruCtrl" style="width:15%;display: table; float:left;margin-right:10px;" class="regPacForm">
+          <label for="Data Estimativa">Data Estimativa: </label>
+          <input readonly ng-init="data_estimativa" type="text" class="form-control" name="data_estimativa" ng-model="data_estimativa">
+        </div>
+
+
+        <div style="width:15%;display:table;margin-bottom: 20px;" class="">
+          <label for="Cabinet">Cabinet: </label>
+          <input readonly ng-init="registerPac.regData.cabinet=main.username" type="text" class="form-control" name="cabinet" ng-model="registerPac.regData.cabinet">
+        </div>
+
+        <!-- <div ng-controller="editPacientCtrl" style="width:15%;display:table;margin-bottom: 20px;" class="">
+          <label for="Numar">Numar: </label>
+          <input readonly type="text" class="form-control" name="pacientnumar" ng-init="pacientnumar" ng-model="pacientnumar">
+        </div> -->
+
+
+      </div>
     </div>
-
-
-    <div class="regPacForm">
-      <label for="Nume">Nume - Prenume: </label>
-      <input type="text" class="form-control" name="nume" placeholder="Nume - Prenume" ng-model="registerPac.regData.nume" autocomplete="off">
-    </div>
-
-    <div class="regPacForm">
-      <label for="Denumire_Aparat">Denumire Aparat: </label>
-      <input type="text" class="form-control" name="denumire_aparat" placeholder="Denumire Aparat" ng-model="registerPac.regData.denumire_aparat"
-        autocomplete="off">
-    </div>
-
-    <div class="regPacForm">
-      <label for="Serie_Aparat">Serie Aparat: </label>
-      <input type="text" class="form-control" name="serie_aparat" placeholder="Serie Aparat" ng-model="registerPac.regData.serie_aparat"
-        autocomplete="off">
-    </div>
-
-    <div class="regPacForm">
-      <label for="Defectiune_Reclamata">Defectiune Reclamata: </label>
-      <input type="text" class="form-control" name="defectiune_reclamata" placeholder="Defectiune Reclamata" ng-model="registerPac.regData.defectiune_reclamata"
-        autocomplete="off">
-    </div>
-
-
-    <div class="regAccesorii" style="margin: 20px 0;">
-      <label for="Garantie">Garantie: </label>
-      <select ng-model="registerPac.regData.garantie" ng-class="registerPac.regData.garantie" style="height:34px;margin-right:20px;"
-        name="garantie">
-        <option value="" selected disabled hidden>Alege</option>
-        <option value="da">Da</option>
-        <option value="nu">Nu</option>
-      </select>
-      <label for="Cutie">Cutie: </label>
-      <select ng-model="registerPac.regData.cutie" ng-class="registerPac.regData.cutie" style="height:34px;margin-right:20px;"
-        name="cutie">
-        <option value="" selected disabled hidden>Alege</option>
-        <option value="da">Da</option>
-        <option value="nu">Nu</option>
-      </select>
-      <label for="Baterie">Baterie: </label>
-      <select ng-model="registerPac.regData.baterie" ng-class="registerPac.regData.baterie" style="height:34px;margin-right:20px;"
-        name="baterie">
-        <option value="" selected disabled hidden>Alege</option>
-        <option value="da">Da</option>
-        <option value="nu">Nu</option>
-      </select>
-      <label for="Mulaj">Mulaj: </label>
-      <select ng-model="registerPac.regData.mulaj" ng-class="registerPac.regData.mulaj" style="height:34px;margin-right:20px;"
-        name="mulaj">
-        <option value="" selected disabled hidden>Alege</option>
-        <option value="da">Da</option>
-        <option value="nu">Nu</option>
-      </select>
-      <label for="Oliva">Oliva: </label>
-      <select ng-model="registerPac.regData.oliva" ng-class="registerPac.regData.oliva" style="height:34px;" name="oliva">
-        <option value="" selected disabled hidden>Alege</option>
-        <option value="da">Da</option>
-        <option value="nu">Nu</option>
-      </select>
-    </div>
-
-
-    <div style="width: 50%;float: left;" class="regPacForm">
-      <label for="Observatii_Cabinet">Observatii Cabinet (optional)</label>
-      <input type="text" class="form-control" name="observatii_cabinet" placeholder="Ex: Faceplate crapat, lipsa usita, carcasa crapata, etc.."
-        ng-model="registerPac.regData.observatii_cabinet" autocomplete="off">
-    </div>
-
-    <div style="width: 50%;float: left;" class="regPacForm">
-      <label for="Observatii_Pacient">Observatii Pacient (optional)</label>
-      <input type="text" class="form-control" name="observatii_pacient" placeholder="Ex: Aude infundat, fluiera cateodata, intrerupe, etc.."
-        ng-model="registerPac.regData.observatii_pacient" autocomplete="off">
-    </div>
-
-
   </div>
 
-  <button style="float: right;clear: both;" ng-disabled="registerPac.disabled" class="btn btn-info btn-sm" type="submit">Adauga</button>
+  <div class="row">
+    <div class="col-sm-12">
+
+      <div style="width:22%;float: left;margin-right: 10px;">
+        <label for="Nume">Nume/Prenume Pacient: </label>
+        <input type="text" class="form-control" name="nume" placeholder="Nume - Prenume" ng-model="registerPac.regData.nume" autocomplete="off">
+      </div>
+
+      <div class="regPacForm">
+        <label for="Denumire_Aparat">Denumire Aparat: </label>
+        <input type="text" class="form-control" name="denumire_aparat" placeholder="Denumire Aparat" ng-model="registerPac.regData.denumire_aparat"
+          autocomplete="off">
+      </div>
+
+      <div style="margin-left:10px;" class="regPacForm ">
+        <label for="Serie_Aparat">Serie Aparat: </label>
+        <input type="text " class="form-control" name="serie_aparat" placeholder="Serie Aparat" ng-model="registerPac.regData.serie_aparat"
+          autocomplete="off">
+      </div>
+
+
+      <br>
+      <div style="margin-bottom: 20px;width: 50%;float:left; ">
+        <label for="Defectiune Reclamata">Defectiune Reclamata Pacient: </label>
+        <input type="text" class="form-control" name="defectiune_reclamata" placeholder="Defectiune Reclamata" ng-model="registerPac.regData.defectiune_reclamata"
+          autocomplete="off">
+      </div>
+
+      <div style="width: 50%;float: left; ">
+        <label for="Observatii Pacient">Observatii Pacient</label>
+        <input type="text" class="form-control" name="observatii_pacient" placeholder="Ex: Aude infundat, fluiera cateodata, intrerupe, etc.."
+          ng-model="registerPac.regData.observatii_pacient" autocomplete="off">
+      </div>
+
+    </div>
+  </div>
+  <h3 class="visible-print-block" style="display: inline-block;color:#337ab7;">II. Diagnostic Cabinet: </h3>
+  <hr class="visible-print-block">
+
+  <div style="margin-top:20px;" class="row">
+    <div class="col-sm-12">
+
+      <div style="float:left;width: 50%;display: table;">
+        <label for="Constatare Cabinet">Constatare Cabinet: </label>
+        <input type="text" class="form-control" name="constatare_cabinet" placeholder="Constatare Cabinet" ng-model="registerPac.regData.constatare_cabinet"
+          autocomplete="off">
+      </div>
+
+
+      <div style="float:left;width: 49%;display:table; ">
+        <label for="Observatii Cabinet ">Observatii Cabinet</label>
+        <input type="text " class="form-control" name="observatii_cabinet" placeholder="Ex: Faceplate crapat, lipsa usita, carcasa crapata, etc.."
+          ng-model="registerPac.regData.observatii_cabinet" autocomplete="off">
+      </div>
+
+    </div>
+  </div>
+  <br>
+
+  <h3 class="visible-print-block" style="display: inline-block;color:#337ab7;">III. Predare / Primire Service: </h3>
+  <hr class="visible-print-block">
+
+  <div style="margin-top:20px;" class="row visible-print-block">
+    <div class="col-sm-12">
+
+      <div style="float:left;width: 50%;display:table;padding:30px;">
+        <p>Predat pacient <br>(semnatura) <br> ................</p>
+      </div>
+      <div style="float:right;width: 49%;display: table;padding:30px;">
+        <p style="float:right;">Primit audiolog <br>(semnatura) <br> ................</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="visible-print-block">
+
+  <div style="text-align:center;" class="row visible-print-block">
+    <div class="col-sm-12">
+      <p>Perioada de efectuare a reparatiei este de maximum 15 zile pentru aparatele in garantie. Postgarantia reparatiei
+        efectuate si a pieselor inlocuite este de 3 luni de la data returnarii aparatului. Pacientul beneficiaza de garantie
+        numai daca foloseste aparatul corect, conform instructiunilor de folosire aprobate de producator.</p>
+    </div>
+  </div>
+
+  <hr class="visible-print-block">
+
+  <button style="float: right;clear: both;margin-bottom: 70px;" ng-disabled="registerPac.disabled" class="btn btn-info btn-sm no-print"
+    type="submit">Adauga si Printeaza Fisa</button>
 
 </form>
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-<div id="regPacAlert" class="row show-hide-message" ng-show="registerPac.successMsg">
-  <div class="alert alert-success">{{ registerPac.successMsg }}</div>
-</div>
-
-<br>
-
-<div id="regPacAlert" style="margin-bottom:150px;font-size:14px;" class=" row show-hide-message " ng-show="registerPac.errorMsg ">
-  <div class="alert alert-danger ">{{ registerPac.errorMsg }}</div>
-</div>
