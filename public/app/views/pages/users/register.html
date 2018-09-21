@@ -43,14 +43,14 @@
         <!-- Username -->
         <label>Username:</label>
         <input class="form-control" type="text" name="username" placeholder="username utilizator" ng-model="register.regData.username"
-            ng-minlength="3" ng-maxlength="25" ng-pattern="/^(?!.*?[\W])(?=.*?[a-zA-Z]|=.*?[A-Z]).{3,16}$/" required>
+            ng-minlength="3" ng-maxlength="35" ng-pattern="/^(?!.*?[\W])(?=.*?[a-zA-Z]|=.*?[A-Z]).{3,26}$/" required>
         <p class="help-block" ng-show="(!regForm.username.$pristine && regForm.username.$error.required) || (regForm.$submitted && regForm.username.$error.required)">Camp
             obligatoriu
         </p>
         <ul ng-show="(!regForm.username.$pristine && regForm.username.$error.pattern) || (!regForm.username.$pristine && regForm.username.$error.minlength) || (!regForm.username.$pristine && regForm.username.$error.maxlength) "
             class="help-block">
             <li>Must not contain any special characters and/or spaces</li>
-            <li>Must be at least 3 characters but no more than 25</li>
+            <li>Must be at least 3 characters but no more than 35</li>
         </ul>
     </div>
     <br>

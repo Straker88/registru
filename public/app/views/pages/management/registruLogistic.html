@@ -1,0 +1,283 @@
+<script type="text/javascript" src="assets/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="assets/js/daterangepicker.js"></script>
+<script type="text/javascript" src="assets/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="assets/locales/bootstrap-datepicker.ro.min.js"></script>
+
+<div class="page-header">
+    <h1 style="color: #1789ab;">Registru Logistic</h1>
+</div>
+
+
+<div class="jumbotron text-center" ng-show="registruLog.loading">
+    <p>Se incarca...</p>
+</div>
+<div>
+    <script>
+        $(document).ready(function () {
+            var oTable = $('#tabel').dataTable({
+                "serverSide": false,
+                "ajax": {
+                    "url": "api/registru/",
+                    headers: {
+                        'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im11c2NhbGx1IiwiZW1haWwiOiJhc2Rhc2Rhc2RAYXNkYXNkYS5jb20iLCJpYXQiOjE1MzQzNDY4MTF9.5kGgjsL9rFnIaJ8RRlYJU4Um5KZYTP8n1c3DM4wGdS8'
+                    },
+                    "type": "GET",
+                    "dataSrc": "pacienti",
+                    "dataType": "json",
+                },
+                "stateSave": false,
+                "pageLength": 25,
+                "searching": true,
+                "pagination": true,
+                "length": "100",
+                columns: [
+                    { data: "cabinet" },
+                    { data: "data_inregistrare" },
+                    { data: "log_sosit" },
+                    { data: "log_plecat" },
+                    { data: "log_preluat" },
+                    { data: "log_trimis" },
+                    { data: "nume" },
+                    { data: "denumire_aparat" },
+                    { data: "" },
+                    { data: "_id" }
+                ],
+                columnDefs: [
+                    {
+                        "targets": 1,
+                        "orderable": true,
+                        type: 'date-eu', targets: ([1]),
+                    },
+                    {
+                        "targets": [9],
+                        "className": "hide_column"
+                    },
+                    {
+                        "aTargets": [8],
+                        "width": "60px",
+                        "mRender": function (data, type, row) {
+                            return '<a class="btn btn-primary btn-sm" href=/editPacient/' + row._id + '>' + 'Detalii' + '</a>';
+                        }
+                    }],
+                "order": [[1, 'desc']],
+                "oLanguage": {
+                    "sSearch": "Cautare generala",
+                    "sLengthMenu": "Afiseaza _MENU_ inregistrari",
+                }
+            });
+
+            var startdate;
+            var enddate;
+
+            $('#reportrange').daterangepicker({
+                ranges: {
+                    "Astazi": [moment(), moment()],
+                    'Ieri': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Ultimele 7 zile': [moment().subtract(6, 'days'), moment()],
+                    'Luna curenta': [moment().startOf('month'), moment().endOf('month')],
+                    'Luna trecuta': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                    'Ultimele 3 luni': [moment().subtract(3, 'month').startOf('month'), moment().endOf('month').endOf('month')],
+                    'Ultimele 6 luni': [moment().subtract(6, 'month').startOf('month'), moment().endOf('month').endOf('month')],
+                    'Tot anul': [moment().startOf('year'), moment().endOf('year')]
+
+                },
+                opens: "right",
+                format: 'DD/MM/YYYY',
+                dateLimit: { days: 365 },
+                locale: {
+                    "format": "DD/MM/YYYY",
+                    "separator": " - ",
+                    "applyLabel": "Aplica",
+                    "cancelLabel": "Anuleaza",
+                    "fromLabel": "De la",
+                    "toLabel": "Pana la",
+                    "customRangeLabel": "Alege interval",
+                    "daysOfWeek": [
+                        "Dum",
+                        "Luni",
+                        "Mar",
+                        "Mie",
+                        "Joi",
+                        "Vin",
+                        "Sam"
+                    ],
+                    "monthNames": [
+                        "Ianuarie",
+                        "Februarie",
+                        "Martie",
+                        "Aprilie",
+                        "Mai",
+                        "Iunie",
+                        "Iulie",
+                        "August",
+                        "Septembrie",
+                        "Octombrie",
+                        "Noiembrie",
+                        "Decembrie"
+                    ],
+                    "firstDay": 1
+                },
+
+            },
+                function (start, end, label) {
+                    var s = moment.utc(start.toISOString());
+                    var e = moment.utc(end.toISOString());
+                    startdate = s.format("YYYY-MM-DD");
+                    enddate = e.format("YYYY-MM-DD");
+                });
+            $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
+                startdate = picker.startDate.format('YYYY-MM-DD');
+                enddate = picker.endDate.format('YYYY-MM-DD');
+
+                $.fn.dataTableExt.afnFiltering.push(
+                    function (oSettings, aData, iDataIndex) {
+                        if (startdate != undefined) {
+                            var coldate = aData[1].split("/");
+                            var d = new Date(coldate[2], coldate[1] - 1, coldate[0]);
+                            var date = moment(d.toISOString());
+                            date = date.format("YYYY-MM-DD");
+                            dateMin = startdate.replace(/-/g, "");
+                            dateMax = enddate.replace(/-/g, "");
+                            date = date.replace(/-/g, "");
+
+                            if (dateMin == "" && date <= dateMax) {
+                                return true;
+                            }
+                            else if (dateMin == "" && date <= dateMax) {
+                                return true;
+                            }
+                            else if (dateMin <= date && "" == dateMax) {
+                                return true;
+                            }
+                            else if (dateMin <= date && date <= dateMax) {
+                                return true;
+                            }
+
+                            return false;
+                        }
+                    }
+                );
+                oTable.fnDraw();
+            });
+
+
+            $('#tabel .filters .FilterinputSearch').each(function () {
+                var title = $('#tabel thead .FilterinputSearch').eq($(this).index()).text();
+                $(this).html('<input type="text" placeholder="cautare" />');
+            });
+
+            var table = $('#tabel').DataTable();
+
+            table.columns([0, 2, 3, 4, 5, 6, 7]).eq(0).each(function (colIdx) {
+                $('input', $('.filters th')[colIdx]).on('keyup change', function () {
+                    table
+                        .column(colIdx)
+                        .search(this.value)
+                        .draw();
+                });
+            });
+
+            var endYear = new Date(new Date().getFullYear(), 11, 31);
+
+            $('#pickyDate, #pickyDate1, #pickyDate2, #pickyDate3').datepicker({
+                clearBtn: true,
+                todayHighlight: true,
+                toggleActive: true,
+                endDate: endYear,
+                language: 'ro',
+                format: "mm/yyyy",
+                startView: "months",
+                minViewMode: "months",
+                maxViewMode: "years",
+            });
+
+            $("#fromdate").datepicker({
+                minViewMode: 1,
+
+            }).on('changeDate', function (ev) {
+                $("#todate").datepicker("option", "minDate", ev.date.setMonth(ev.date.getMonth() + 1));
+            });
+
+        });
+
+
+    </script>
+</div>
+<br>
+<div id="inreg" style="font-size:12px; line-height:2.3em;">
+
+    <table id="tabel" class="display" style="width:100%" ng-cloak>
+        <thead id="head2">
+            <tr>
+                <th>Cabinet</th>
+                <th>Inregistrat</th>
+                <th>Sosit din Cabinet</th>
+                <th>Plecat spre Service</th>
+                <th>Preluat din Service</th>
+                <th>Trimis spre Cabinet</th>
+                <th>Nume</th>
+                <th>Denumire Aparat</th>
+                <th style="width:20px;pointer-events: none;border-bottom: none;"></th>
+                <th style="width:20px;pointer-events: none;"></th>
+            </tr>
+        </thead>
+
+        <thead class="filters">
+            <tr>
+                <th class="FilterinputSearch">Cabinet</th>
+                <th class="daterange" style="padding-top:0px;">
+                    <div class="input-prepend input-group daterange"> <span style="background: #fff;letter-spacing: 0.1em;">Calendar
+                            <i class="glyphicon glyphicon-calendar fa fa-calendar daterange"></i></span>
+                        <p><input class="inputDateRegistruLog btn btn-primary btn-sm" name="reportrange" id="reportrange"
+                                readonly></p>
+                    </div>
+                </th>
+                <th style="padding-top: 24px;">
+                    <input class="btn btn-primary btn-sm luna" style="margin-bottom: 5px;max-width: 145px;text-align: center;" type="text" placeholder="Luna"
+                        id="pickyDate" />
+                </th>
+                <th style="padding-top: 24px;">
+                    <input class="btn btn-primary btn-sm luna" style="margin-bottom: 5px; max-width: 145px;text-align: center;" type="text" placeholder="Luna"
+                        id="pickyDate1" />
+                </th>
+                <th style="padding-top: 24px;">
+                    <input class="btn btn-primary btn-sm luna" style="margin-bottom: 5px; max-width: 145px;text-align: center;" type="text" placeholder="Luna"
+                        id="pickyDate2" />
+                </th>
+                <th style="padding-top: 24px;">
+                    <input class="btn btn-primary btn-sm luna" style="margin-bottom: 5px; max-width: 145px;text-align: center;" type="text" placeholder="Luna"
+                        id="pickyDate3" />
+                </th>
+                <th class="FilterinputSearch">Nume - Prenume</th>
+                <th class="FilterinputSearch">Denumire Aparat</th>
+                <th style="width:20px;pointer-events: none;"></th>
+                <th style="width:20px;pointer-events: none;"></th>
+
+
+            </tr>
+        </thead>
+
+        <tbody ng-cloak>
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <th>Cabinet</th>
+                <th>Inregistrat</th>
+                <th>Sosit din Cabinet</th>
+                <th>Plecat spre Service</th>
+                <th>Preluat din Service</th>
+                <th>Trimis spre Cabinet</th>
+                <th>Nume</th>
+                <th>Denumire Aparat</th>
+                <th style="width:20px;pointer-events: none;border-bottom: none;"></th>
+                <th style="width:20px;pointer-events: none;"></th>
+            </tr>
+        </tfoot>
+
+    </table>
+
+</div>
+
+<br>
+<br>

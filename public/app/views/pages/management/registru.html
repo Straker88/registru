@@ -1,11 +1,19 @@
 <script type="text/javascript" src="assets/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="assets/js/daterangepicker.js"></script>
+<script type="text/javascript" src="assets/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="assets/locales/bootstrap-datepicker.ro.min.js"></script>
+
+
+<div class="page-header">
+    <h1 style="color: #1789ab;">Registru Service General</h1>
+</div>
 
 <div class="jumbotron text-center" ng-show="registru.loading">
     <p>Se incarca...</p>
 </div>
 <div>
     <script>
+
         $(document).ready(function () {
             var oTable = $('#tabel').dataTable({
                 "serverSide": false,
@@ -22,7 +30,6 @@
                 "pageLength": 25,
                 "searching": true,
                 "pagination": true,
-
                 "length": "100",
                 columns: [
                     { data: "cabinet" },
@@ -30,24 +37,27 @@
                     { data: "nume" },
                     { data: "denumire_aparat" },
                     { data: "defectiune_reclamata" },
-                    { data: "updated_at" },
+                    { data: "serv_sosit" },
+                    { data: "finalizat_reparatie" },
+                    { data: "serv_plecat" },
                     { data: "" },
                     { data: "_id" }
                 ],
                 columnDefs: [
                     {
-                        "targets": 0,
+                        "targets": 1,
                         "orderable": true,
                         type: 'date-eu', targets: ([1]),
                     },
                     {
-                        "targets": [7],
+                        "targets": [9],
                         "className": "hide_column"
                     },
                     {
-                        "aTargets": [6],
+                        "aTargets": [8],
+                        "width": "60px",
                         "mRender": function (data, type, row) {
-                            return '<a class="btn btn-info btn-sm" href=/editPacient/' + row._id + '>' + 'Detalii' + '</a>';
+                            return '<a class="btn btn-primary btn-sm" href=/editPacient/' + row._id + '>' + 'Detalii' + '</a>';
                         }
                     }],
                 "order": [[1, 'desc']],
@@ -62,14 +72,15 @@
 
             $('#reportrange').daterangepicker({
                 ranges: {
-                    'Tot anul': [moment().startOf('year'), moment().endOf('year')],
                     "Astazi": [moment(), moment()],
                     'Ieri': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
                     'Ultimele 7 zile': [moment().subtract(6, 'days'), moment()],
                     'Luna curenta': [moment().startOf('month'), moment().endOf('month')],
                     'Luna trecuta': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
                     'Ultimele 3 luni': [moment().subtract(3, 'month').startOf('month'), moment().endOf('month').endOf('month')],
-                    'Ultimele 6 luni': [moment().subtract(6, 'month').startOf('month'), moment().endOf('month').endOf('month')]
+                    'Ultimele 6 luni': [moment().subtract(6, 'month').startOf('month'), moment().endOf('month').endOf('month')],
+                    'Tot anul': [moment().startOf('year'), moment().endOf('year')]
+
                 },
                 opens: "right",
                 format: 'DD/MM/YYYY',
@@ -150,6 +161,7 @@
                 oTable.fnDraw();
             });
 
+
             $('#tabel .filters .FilterinputSearch').each(function () {
                 var title = $('#tabel thead .FilterinputSearch').eq($(this).index()).text();
                 $(this).html('<input type="text" placeholder="cautare" />');
@@ -157,7 +169,7 @@
 
             var table = $('#tabel').DataTable();
 
-            table.columns([0, 2, 3, 4, 5]).eq(0).each(function (colIdx) {
+            table.columns([0, 2, 3, 4, 5, 6, 7]).eq(0).each(function (colIdx) {
                 $('input', $('.filters th')[colIdx]).on('keyup change', function () {
                     table
                         .column(colIdx)
@@ -165,26 +177,47 @@
                         .draw();
                 });
             });
-            setInterval(function () {
-                table.ajax.reload();
-            }, 60000);
         });
+
+        var endYear = new Date(new Date().getFullYear(), 11, 31);
+
+        $('#pickyDate, #pickyDate1').datepicker({
+            clearBtn: true,
+            todayHighlight: true,
+            toggleActive: true,
+            endDate: endYear,
+            language: 'ro',
+            format: "mm/yyyy",
+            startView: "months",
+            minViewMode: "months",
+            maxViewMode: "years",
+        });
+
+        $("#fromdate").datepicker({
+            minViewMode: 1,
+
+        }).on('changeDate', function (ev) {
+            $("#todate").datepicker("option", "minDate", ev.date.setMonth(ev.date.getMonth() + 1));
+        });
+
     </script>
 </div>
 <br>
-<div>
+<div style="font-size:12px; line-height:2.3em;">
 
-    <table id="tabel" class="display" style="width:100%">
+    <table id="tabel" class="display" style="width:100%" ng-cloak>
         <thead id="head2">
             <tr>
                 <th>Cabinet</th>
                 <th>Inregistrat</th>
-                <th>Nume - Prenume</th>
+                <th>Nume</th>
                 <th>Denumire Aparat</th>
                 <th>Defectiune</th>
-                <th>updated_at</th>
-                <th style="display: none;">Detalii</th>
-                <th style="display: none;">id</th>
+                <th>Intrat Service</th>
+                <th>Finalizat Reparatie</th>
+                <th>Iesit Service</th>
+                <th style="width:20px;pointer-events: none;border-bottom: none;"></th>
+                <th style="width:20px;pointer-events: none;"></th>
             </tr>
         </thead>
 
@@ -192,36 +225,51 @@
             <tr>
                 <th class="FilterinputSearch">Cabinet</th>
                 <th class="daterange">
-                    <div class="input-prepend input-group daterange"> <span style="background: #fff;letter-spacing: 0.1em;"
-                            class="add-on input-group-addon daterange">Alege interval <i class="glyphicon glyphicon-calendar fa fa-calendar daterange"></i></span>
-                        <p><input style="border:none;margin-left:5px;width: 155px;margin-top: 1px; font-size: 13px;text-align: center;border-radius: 4px;cursor: pointer;line-height: 29px;color: #08c;"
-                                name="reportrange" id="reportrange" class="daterange" value="" readonly></p>
+                    <div class="input-prepend input-group daterange"> <span style="background: #fff;letter-spacing: 0.1em;">Calendar
+                            <i class="glyphicon glyphicon-calendar fa fa-calendar daterange"></i></span>
+                        <p><input class="inputDateRegistruServ btn btn-primary btn-sm" name="reportrange" id="reportrange"
+                                readonly></p>
                     </div>
                 </th>
                 <th class="FilterinputSearch">Nume - Prenume</th>
                 <th class="FilterinputSearch">Denumire Aparat</th>
                 <th class="FilterinputSearch">Defectiune Reclamata</th>
-                <th class="FilterinputSearch">updated_at</th>
-                <th style="display: none;"></th>
-                <th style="display: none;"></th>
+                <th style="padding-top: 24px;">
+                    <input class="btn btn-primary btn-sm luna" style="margin-bottom: 5px;max-width: 145px;text-align: center;" type="text" placeholder="Luna"
+                        id="pickyDate" />
+                </th>
+                <th style="padding-top: 24px;">
+                    <input class="btn btn-primary btn-sm luna" style="margin-bottom: 5px;max-width: 145px;text-align: center;" type="text" placeholder="Luna"
+                        id="pickyDate1" />
+                </th>
+
+                <th style="padding-top: 24px;">
+                    <input class="btn btn-primary btn-sm luna" style="margin-bottom: 5px; max-width: 145px;text-align: center;" type="text" placeholder="Luna"
+                        id="pickyDate2" />
+                </th>
+
+                <th style="width:20px;pointer-events: none;"></th>
+                <th style="width:20px;pointer-events: none;"></th>
 
 
             </tr>
         </thead>
 
-        <tbody>
+        <tbody ng-cloak>
         </tbody>
 
         <tfoot>
             <tr>
                 <th>Cabinet</th>
                 <th>Inregistrat</th>
-                <th>Nume - Prenume</th>
+                <th>Nume</th>
                 <th>Denumire Aparat</th>
-                <th>Defectiune Reclamata</th>
-                <th>updated_at</th>
-                <th style="display: none;">Detalii</th>
-                <th style="display: none;">id</th>
+                <th>Defectiune</th>
+                <th>Intrat Service</th>
+                <th>Finalizat Reparatie</th>
+                <th>Iesit Service</th>
+                <th style="width:20px;pointer-events: none;"></th>
+                <th style="width:20px;pointer-events: none;"></th>
             </tr>
         </tfoot>
 
@@ -231,6 +279,3 @@
 
 <br>
 <br>
-<!-- <div class="row show-hide-message" ng-show="registru.showMoreError">
-    <div class="alert alert-danger">{{ registru.showMoreError }}</div>
-</div> -->

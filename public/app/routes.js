@@ -31,11 +31,20 @@ var app = angular.module('appRoutes', ['ngRoute'])
                 authenticated: true
             })
 
-            .when('/profile', {
-                templateUrl: 'app/views/pages/users/profile.html',
+            .when('/profil', {
+                templateUrl: 'app/views/pages/management/profil.html',
                 controller: 'registruCtrl',
                 controllerAs: 'registru',
-                authenticated: true
+                authenticated: true,
+                permission: ['admin', 'moderator', 'user', 'service']
+            })
+
+            .when('/profil_service', {
+                templateUrl: 'app/views/pages/management/profil_service.html',
+                controller: 'registruCtrl',
+                controllerAs: 'registru',
+                authenticated: true,
+                permission: ['admin', 'moderator', 'service']
             })
 
             .when('/management', {
@@ -51,20 +60,34 @@ var app = angular.module('appRoutes', ['ngRoute'])
                 controller: 'editCtrl',
                 controllerAs: 'edit',
                 authenticated: true,
-                permission: ['admin', 'moderator']
+                permission: ['admin', 'moderator', 'service', 'logistic']
 
             })
 
-            //Pacient Ctrl
             .when('/registru', {
                 templateUrl: 'app/views/pages/management/registru.html',
                 controller: 'registruCtrl',
                 controllerAs: 'registru',
                 authenticated: true,
-
-
+                permission: ['admin', 'moderator', 'service']
             })
-            //Pacient Registru
+
+            .when('/registruLogistic', {
+                templateUrl: 'app/views/pages/management/registruLogistic.html',
+                controller: 'registruLogisticCtrl',
+                controllerAs: 'registruLog',
+                authenticated: true,
+                permission: ['admin', 'moderator', 'logistic']
+            })
+
+            .when('/piese', {
+                templateUrl: 'app/views/pages/management/piese.html',
+                controller: 'registruCtrl',
+                controllerAs: 'registru',
+                authenticated: true,
+                permission: ['admin', 'moderator', 'service']
+            })
+
             .when('/editPacient/:id', {
                 templateUrl: 'app/views/pages/management/editPacient.html',
                 controller: 'editPacientCtrl',
@@ -72,7 +95,6 @@ var app = angular.module('appRoutes', ['ngRoute'])
                 authenticated: true,
 
             })
-            //Pacient Add
             .when('/registerPac', {
                 templateUrl: 'app/views/pages/users/registerPacient.html',
                 controller: 'regPacientCtrl',
@@ -80,7 +102,6 @@ var app = angular.module('appRoutes', ['ngRoute'])
                 authenticated: true
             })
 
-            //Pacient Cautare
             .when('/search', {
                 templateUrl: 'app/views/pages/management/search.html',
                 controller: 'registruCtrl',
@@ -113,8 +134,12 @@ app.run(['$rootScope', 'Auth', '$location', 'User', function ($rootScope, Auth, 
                     User.getPermission().then(function (data) {
                         if (next.$$route.permission[0] !== data.data.permission) {
                             if (next.$$route.permission[1] !== data.data.permission) {
-                                event.preventDefault();
-                                $location.path('/');
+                                if (next.$$route.permission[2] !== data.data.permission) {
+                                    if (next.$$route.permission[3] !== data.data.permission) {
+                                        event.preventDefault();
+                                        $location.path('/');
+                                    }
+                                }
                             }
                         }
                     });
@@ -122,7 +147,7 @@ app.run(['$rootScope', 'Auth', '$location', 'User', function ($rootScope, Auth, 
             } else if (next.$$route.authenticated === false) {
                 if (Auth.isLoggedIn()) {
                     event.preventDefault();
-                    $location.path('/profile');
+                    $location.path('/profil');
                 }
             }
         }

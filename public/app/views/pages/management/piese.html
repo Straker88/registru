@@ -1,0 +1,151 @@
+<script type="text/javascript" src="assets/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="assets/js/daterangepicker.js"></script>
+<script type="text/javascript" src="assets/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="assets/locales/bootstrap-datepicker.ro.min.js"></script>
+
+
+
+<div class="jumbotron text-center" ng-show="registru.loading">
+    <p>Se incarca...</p>
+</div>
+<div>
+    <script>
+
+        $(document).ready(function () {
+            var oTable = $('#tabel').dataTable({
+                "serverSide": false,
+                "ajax": {
+                    "url": "api/registru/",
+                    headers: {
+                        'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im11c2NhbGx1IiwiZW1haWwiOiJhc2Rhc2Rhc2RAYXNkYXNkYS5jb20iLCJpYXQiOjE1MzQzNDY4MTF9.5kGgjsL9rFnIaJ8RRlYJU4Um5KZYTP8n1c3DM4wGdS8'
+                    },
+                    "type": "GET",
+                    "dataSrc": "pacienti",
+                    "dataType": "json",
+                },
+                "stateSave": false,
+                "pageLength": 25,
+                "searching": true,
+                "pagination": true,
+                "length": "100",
+                columns: [
+                    { data: "finalizat_reparatie" },
+                    { data: "cabinet" },
+                    { data: "piese_inlocuite" },
+                    { data: "cod_componente" },
+                    { data: "" },
+                    { data: "_id" }
+                ],
+                columnDefs: [
+
+                    {
+                        "targets": [5],
+                        "className": "hide_column"
+                    },
+                    {
+                        "aTargets": [4],
+                        "width": "60px",
+                        "mRender": function (data, type, row) {
+                            return '<a class="btn btn-primary btn-sm" href=/editPacient/' + row._id + '>' + 'Detalii' + '</a>';
+                        }
+                    }],
+                "order": [[0, 'asc']],
+                "oLanguage": {
+                    "sSearch": "Cautare generala",
+                    "sLengthMenu": "Afiseaza _MENU_ inregistrari",
+                }
+            });
+
+
+            $('#tabel .filters .FilterinputSearch').each(function () {
+                var title = $('#tabel thead .FilterinputSearch').eq($(this).index()).text();
+                $(this).html('<input type="text" placeholder="cautare" />');
+            });
+
+            var table = $('#tabel').DataTable();
+
+            table.columns([0, 2, 3]).eq(0).each(function (colIdx) {
+                $('input', $('.filters th')[colIdx]).on('keyup change', function () {
+                    table
+                        .column(colIdx)
+                        .search(this.value)
+                        .draw();
+                });
+            });
+        });
+
+        var endYear = new Date(new Date().getFullYear(), 11, 31);
+
+        $('#pickyDate').datepicker({
+            clearBtn: true,
+            todayHighlight: true,
+            toggleActive: true,
+            endDate: endYear,
+            language: 'ro',
+            format: "mm/yyyy",
+            startView: "months",
+            minViewMode: "months",
+            maxViewMode: "years",
+        });
+
+        $("#fromdate").datepicker({
+            minViewMode: 1,
+
+        }).on('changeDate', function (ev) {
+            $("#todate").datepicker("option", "minDate", ev.date.setMonth(ev.date.getMonth() + 1));
+        });
+
+    </script>
+</div>
+<br>
+<div style="font-size:12px; line-height:2.3em;">
+
+    <table id="tabel" class="display piese" style="width:100%" ng-cloak>
+        <thead id="head2">
+            <tr>
+                <th>Finalizat Reparatie</th>
+                <th>Cabinet</th>
+                <th>Piese Inlocuite</th>
+                <th>Cod Componente</th>
+                <th style="width:20px;pointer-events: none;border-bottom: none;"></th>
+                <th style="width:20px;pointer-events: none;"></th>
+            </tr>
+        </thead>
+
+        <thead class="filters">
+            <tr>
+                <th style="padding-top: 0px;">
+                    <input class="btn btn-primary btn-sm luna" style="margin-top: 15px;;max-width: 145px;text-align: center;" type="text" placeholder="Luna"
+                        id="pickyDate" />
+                </th>
+
+                <th class="FilterinputSearch">Cabinet</th>
+                <th class="FilterinputSearch">Piese Inlocuite</th>
+                <th class="FilterinputSearch">Cod Componente</th>
+                <th style="width:20px;pointer-events: none;"></th>
+                <th style="width:20px;pointer-events: none;"></th>
+
+
+            </tr>
+        </thead>
+
+        <tbody ng-cloak>
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <th>Finalizat Reparatie</th>
+                <th>Cabinet</th>
+                <th>Piese Inlocuite</th>
+                <th>Cod Componente</th>
+                <th style="width:20px;pointer-events: none;"></th>
+                <th style="width:20px;pointer-events: none;"></th>
+            </tr>
+        </tfoot>
+
+    </table>
+
+</div>
+
+<br>
+<br>

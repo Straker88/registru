@@ -1,0 +1,258 @@
+<script type="text/javascript" src="assets/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="assets/js/daterangepicker.js"></script>
+<script type="text/javascript" src="assets/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="assets/locales/bootstrap-datepicker.ro.min.js"></script>
+
+<div class="page-header">
+    <h1 style="color: #1789ab;">Inregistrarile cabinetului : {{ main.username }}</h1>
+</div>
+
+<div class="jumbotron text-center" ng-show="registru.loading">
+    <p style="color: #1789ab;">Se incarca...</p>
+</div>
+
+<br>
+
+<div style="margin-bottom:150px;" id="inreg">
+
+    <table id="tabel" class="display" style="width:100%;font-size:12px;">
+        <thead>
+            <tr>
+                <th>Data Inregistrare</th>
+                <th>Nume Pacient</th>
+                <th>Denumire Aparat </th>
+                <th>Defectiune Reclamata</th>
+                <th>Data Intrat Service</th>
+                <th>Data Finalizat Reparatie</th>
+                <th>Data Iesit Service</th>
+                <th style="width:75px;pointer-events: none;"></th>
+            </tr>
+        </thead>
+        <thead class="filters" id="head2">
+            <th class="daterange">
+                <div class="input-prepend input-group daterange"> <span style="background: #fff;letter-spacing: 0.1em;">Calendar
+                        <i class="glyphicon glyphicon-calendar fa fa-calendar daterange"></i></span>
+                    <p><input class="inputDateProfil btn btn-primary btn-sm" name="reportrange" id="reportrange" readonly></p>
+                </div>
+            </th>
+
+            <th class="FilterinputSearch">Nume Pacient</th>
+            <th class="FilterinputSearch">Denumire Aparat </th>
+            <th class="FilterinputSearch">Defectiune Reclamata</th>
+            <th style="padding-top: 24px;">
+                <input class="btn btn-primary btn-sm luna" style="margin-bottom: 5px;max-width: 145px;text-align: center;" type="text" placeholder="Luna"
+                    id="pickyDate" />
+            </th>
+            <th style="padding-top: 24px;">
+                <input class="btn btn-primary btn-sm luna" style="margin-bottom: 5px;max-width: 145px;text-align: center;" type="text" placeholder="Luna"
+                    id="pickyDate1" />
+            </th>
+            <th style="padding-top: 24px;">
+                <input class="btn btn-primary btn-sm luna" style="margin-bottom: 5px;max-width: 145px;text-align: center;" type="text" placeholder="Luna"
+                    id="pickyDate2" />
+            </th>
+            <th></th>
+
+        </thead>
+
+
+        <tbody>
+
+            <tr ng-repeat="pacient in registru.pacienti |filter: main.username" ng-cloak>
+                <td>{{ pacient.data_inregistrare }}</td>
+                <td>{{ pacient.nume }}</td>
+                <td>{{ pacient.denumire_aparat }}</td>
+                <td>{{ pacient.defectiune_reclamata }}</td>
+                <td>{{ pacient.serv_sosit }}</td>
+                <td>{{ pacient.finalizat_reparatie }}</td>
+                <td>{{ pacient.serv_plecat }}</td>
+                <td>
+                    <a href="/editPacient/{{ pacient._id }}">
+                        <button style="padding-top:0px; padding-bottom:0px;
+                      " type="button" ng-show="registru.editPacientAccess" class="btn btn-primary btn-sm">Detalii</button>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Data Inregistrare</th>
+                <th>Nume Pacient</th>
+                <th>Denumire Aparat </th>
+                <th>Defectiune Reclamata</th>
+                <th>Data Intrat Service</th>
+                <th>Data Finalizat Reparatie</th>
+                <th>Data Iesit Service</th>
+                <th style="width:75px;pointer-events: none;"></th>
+            </tr>
+        </tfoot>
+    </table>
+
+</div>
+
+<script>
+
+    $(function () {
+
+        $('#inreg').hide();
+
+        setTimeout(function () {
+            $('#inreg').fadeIn('slow');
+        }, 1300);
+
+    });
+
+    $(document).ready(function () {
+        setTimeout(function () {
+
+            var oTable = $('#tabel').dataTable({
+                "iDisplayLength": 10,
+                "pagination": true,
+                "processing": true,
+                "length": "100",
+                "columnDefs": [
+                    {
+                        "targets": 0,
+                        "orderable": true,
+                        type: 'date-eu', targets: ([0]),
+                    },
+                ],
+                "order": [[0, 'asc']],
+                "oLanguage": {
+                    "sSearch": "Cautare generala",
+                    "sLengthMenu": "Afiseaza _MENU_ inregistrari",
+                }
+            });
+            var startdate;
+            var enddate;
+
+            $('#reportrange').daterangepicker({
+                ranges: {
+                    'Tot anul': [moment().startOf('year'), moment().endOf('year')],
+                    "Astazi": [moment(), moment()],
+                    'Ieri': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Ultimele 7 zile': [moment().subtract(6, 'days'), moment()],
+                    'Luna curenta': [moment().startOf('month'), moment().endOf('month')],
+                    'Luna trecuta': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                    'Ultimele 3 luni': [moment().subtract(3, 'month').startOf('month'), moment().endOf('month').endOf('month')],
+                    'Ultimele 6 luni': [moment().subtract(6, 'month').startOf('month'), moment().endOf('month').endOf('month')]
+                },
+                opens: "right",
+                format: 'DD/MM/YYYY',
+                dateLimit: { days: 365 },
+                locale: {
+                    "format": "DD/MM/YYYY",
+                    "separator": " - ",
+                    "applyLabel": "Aplica",
+                    "cancelLabel": "Anuleaza",
+                    "fromLabel": "De la",
+                    "toLabel": "Pana la",
+                    "customRangeLabel": "Alege interval",
+                    "daysOfWeek": [
+                        "Dum",
+                        "Luni",
+                        "Mar",
+                        "Mie",
+                        "Joi",
+                        "Vin",
+                        "Sam"
+                    ],
+                    "monthNames": [
+                        "Ianuarie",
+                        "Februarie",
+                        "Martie",
+                        "Aprilie",
+                        "Mai",
+                        "Iunie",
+                        "Iulie",
+                        "August",
+                        "Septembrie",
+                        "Octombrie",
+                        "Noiembrie",
+                        "Decembrie"
+                    ],
+                    "firstDay": 1
+                },
+
+            },
+                function (start, end, label) {
+                    var s = moment.utc(start.toISOString());
+                    var e = moment.utc(end.toISOString());
+                    startdate = s.format("YYYY-MM-DD");
+                    enddate = e.format("YYYY-MM-DD");
+                });
+
+            $('#tabel .filters .FilterinputSearch').each(function () {
+                var title = $('#tabel thead .FilterinputSearch').eq($(this).index()).text();
+                $(this).html('<input type="text" placeholder="cautare" />');
+            });
+
+            var table = $('#tabel').DataTable();
+
+            table.columns([1, 2, 3, 4, 5, 6]).eq(0).each(function (colIdx) {
+                $('input', $('.filters th')[colIdx]).on('keyup change', function () {
+                    table
+                        .column(colIdx)
+                        .search(this.value)
+                        .draw();
+                });
+            });
+            $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
+                startdate = picker.startDate.format('YYYY-MM-DD');
+                enddate = picker.endDate.format('YYYY-MM-DD');
+
+                $.fn.dataTableExt.afnFiltering.push(
+                    function (oSettings, aData, iDataIndex) {
+                        if (startdate != undefined) {
+                            var coldate = aData[0].split("/");
+                            var d = new Date(coldate[2], coldate[1] - 1, coldate[0]);
+                            var date = moment(d.toISOString());
+                            date = date.format("YYYY-MM-DD");
+                            dateMin = startdate.replace(/-/g, "");
+                            dateMax = enddate.replace(/-/g, "");
+                            date = date.replace(/-/g, "");
+
+                            if (dateMin == "" && date <= dateMax) {
+                                return true;
+                            }
+                            else if (dateMin == "" && date <= dateMax) {
+                                return true;
+                            }
+                            else if (dateMin <= date && "" == dateMax) {
+                                return true;
+                            }
+                            else if (dateMin <= date && date <= dateMax) {
+                                return true;
+                            }
+
+                            return false;
+                        }
+                    }
+                );
+                oTable.fnDraw();
+            });
+        }, 1300);
+
+    });
+    var endYear = new Date(new Date().getFullYear(), 11, 31);
+
+    $('#pickyDate, #pickyDate1, #pickyDate2').datepicker({
+        clearBtn: true,
+        todayHighlight: true,
+        toggleActive: true,
+        endDate: endYear,
+        language: 'ro',
+        format: "mm/yyyy",
+        startView: "months",
+        minViewMode: "months",
+        maxViewMode: "years",
+    });
+
+    $("#fromdate").datepicker({
+        minViewMode: 1,
+
+    }).on('changeDate', function (ev) {
+        $("#todate").datepicker("option", "minDate", ev.date.setMonth(ev.date.getMonth() + 1));
+    });
+
+</script>

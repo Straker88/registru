@@ -14,6 +14,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment-with-locales.min.js"></script>
   <script src="assets/js/momentjs-business.js"></script>
 
+
+  <script src="assets/js/main.js"></script>
   <script src="assets/js/angular.js"></script>
   <script src="assets/js/angular-route.js"></script>
   <script src="assets/js/directive.pagination.js"></script>
@@ -34,7 +36,7 @@
 
 </head>
 
-<body ng-app="userApp" ng-controller="mainCtrl as main" ng-show="main.loadme" ng-cloak>
+<body ng-app="registruApp" ng-controller="mainCtrl as main" ng-cloak>
 
   <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
@@ -45,13 +47,23 @@
             <a ng-show="!main.isLoggedIn" href="/login">Login</a>
           </li>
           <li>
-            <a ng-show="main.isLoggedIn" href="/registru">Registru Service</a>
-          </li>
-          <li id="registerPac">
-            <a ng-show="main.isLoggedIn" href="/registerPac">Adauga Service</a>
+            <a ng-show="main.service || main.authorized" href="/registru">Registru Service</a>
           </li>
           <li>
-            <a ng-show="main.isLoggedIn" href="/profile">Inregistrarile mele</a>
+            <a ng-show="main.service || main.authorized" href="/profil_service">Inregistrarile Mele</a>
+          </li>
+          <li>
+            <a ng-show="main.service || main.authorized" href="/piese">Piese</a>
+          </li>
+
+          <li>
+            <a ng-show="main.logistic" href="/registruLogistic">Registru Logistic</a>
+          </li>
+          <li>
+            <a ng-show="main.isLoggedIn && !main.logistic && !main.service" href="/profil">Inregistrarile mele</a>
+          </li>
+          <li id="registerPac">
+            <a ng-show="main.isLoggedIn && !main.logistic" href="/registerPac">Adauga Service</a>
           </li>
           <li id="register">
             <a ng-show="main.authorized" href="/register">Inregistrare</a>
@@ -87,6 +99,7 @@
   </div>
   <!--bootstrap 3.3.7-->
   <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="assets/css/bootstrap-datepicker.css">
   <link rel="stylesheet" type="text/css" href="assets/css/style.css">
   <link rel="stylesheet" type="text/css" href="assets/css/jquery.dataTables.min.css">
   <link rel="stylesheet" type="text/css" href="assets/css/dataTables.bootstrap4.min.css">
